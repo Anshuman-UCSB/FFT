@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Size;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
@@ -14,6 +15,8 @@ import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
+import androidx.camera.core.resolutionselector.AspectRatioStrategy;
+import androidx.camera.core.resolutionselector.ResolutionSelector;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
@@ -52,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         mPreviewView = findViewById(R.id.previewView);
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
-        mGraphicOverlay.setImageSourceInfo(1080,1920, true);
 
         mPreviewView.setScaleType(PreviewView.ScaleType.FIT_START);
         getCameraPermission();
@@ -83,13 +85,15 @@ public class MainActivity extends AppCompatActivity {
     private void bindPreview(ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder()
                 .build();
-
         CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
                 .build();
 
         ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .setResolutionSelector(new ResolutionSelector.Builder()
+                        .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
+                        .build())
                 .build();
 
         imageAnalysis.setAnalyzer(getCameraExecutor(), new ImageAnalysis.Analyzer() {
@@ -98,10 +102,14 @@ public class MainActivity extends AppCompatActivity {
                 processImage(imageProxy);
             }
         });
-
+        // Obtain the preview resolution
         preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
 
+
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview, imageAnalysis);
+        Log.i("GraphicOverlay", "resolution info: "+preview.getResolutionInfo().getResolution().toString());
+        Size resolution = preview.getResolutionInfo().getResolution();
+        mGraphicOverlay.setImageSourceInfo(resolution.getWidth(),resolution.getHeight(), true);
     }
 
     @OptIn(markerClass = ExperimentalGetImage.class) private void processImage(ImageProxy imageProxy) {
@@ -138,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         mGraphicOverlay.add(new PoseLineGraphic(mGraphicOverlay, extracted.get("LEFT_EYE"), extracted.get("RIGHT_EYE")));
         // Access landmarks for further processing or visualization
         Log.i(TAG, "Landmarks: "+landmarks.size());
+        Log.i(TAG, "Preview resolution: "+mPreviewView.getWidth() + "x"+mPreviewView.getHeight());
     }
 
     private Map<String, PoseLandmark> extractLandmarks(List<PoseLandmark> landmarks){

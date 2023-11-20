@@ -193,14 +193,13 @@ public class GraphicOverlay extends View {
     public void setImageSourceInfo(int imageWidth, int imageHeight, boolean isFlipped) {
         Preconditions.checkState(imageWidth > 0, "image width must be positive");
         Preconditions.checkState(imageHeight > 0, "image height must be positive");
+        Log.i("GraphicOverlay","Setting image source info to "+imageWidth+"x"+imageHeight);
         synchronized (lock) {
-            Log.i("LOCK", "lock claimed");
             this.imageWidth = imageWidth;
             this.imageHeight = imageHeight;
             this.isImageFlipped = isFlipped;
             needUpdateTransformation = true;
         }
-        Log.i("LOCK", "lock released");
         postInvalidate();
     }
 
@@ -220,15 +219,19 @@ public class GraphicOverlay extends View {
         float imageAspectRatio = (float) imageWidth / imageHeight;
         postScaleWidthOffset = 0;
         postScaleHeightOffset = 0;
+        Log.i("GraphicOverlay", "View aspect: "+viewAspectRatio + "Image aspect: "+imageAspectRatio);
         if (viewAspectRatio > imageAspectRatio) {
             // The image needs to be vertically cropped to be displayed in this view.
             scaleFactor = (float) getWidth() / imageWidth;
             postScaleHeightOffset = ((float) getWidth() / imageAspectRatio - getHeight()) / 2;
+            Log.i("GraphicOverlay","Image needs to be vertically cropped");
         } else {
             // The image needs to be horizontally cropped to be displayed in this view.
             scaleFactor = (float) getHeight() / imageHeight;
             postScaleWidthOffset = ((float) getHeight() * imageAspectRatio - getWidth()) / 2;
+            Log.i("GraphicOverlay","Image needs to be horizontally cropped");
         }
+        Log.i("GraphicOverlay",scaleFactor+"");
 
         transformationMatrix.reset();
         transformationMatrix.setScale(scaleFactor, scaleFactor);
@@ -247,13 +250,11 @@ public class GraphicOverlay extends View {
         super.onDraw(canvas);
 
         synchronized (lock) {
-            Log.i("LOCK", "lock claimed");
             updateTransformationIfNeeded();
 
             for (Graphic graphic : graphics) {
                 graphic.draw(canvas);
             }
         }
-        Log.i("LOCK", "lock released");
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.util.Log;
 
 import com.google.mlkit.vision.pose.PoseLandmark;
 
@@ -30,7 +31,7 @@ public class PoseLineGraphic extends GraphicOverlay.Graphic {
         PointF end = translateLandmark(endLandmark.getPosition());
 
         canvas.drawLine(start.x, start.y, end.x, end.y, linePaint);
-//        Log.i("Line", "Drawing line with points "+start+" and "+end);
+        Log.i("Line", "Drawing line with points "+start+" and "+end);
     }
 
     private PointF translateLandmark(PointF landmark) {
