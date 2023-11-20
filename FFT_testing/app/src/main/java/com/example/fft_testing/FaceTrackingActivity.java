@@ -23,9 +23,14 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.pose.Pose;
+import com.google.mlkit.vision.pose.PoseDetection;
+import com.google.mlkit.vision.pose.PoseDetector;
+import com.google.mlkit.vision.pose.PoseLandmark;
+import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class FaceTrackingActivity extends AppCompatActivity {
@@ -38,10 +43,12 @@ public class FaceTrackingActivity extends AppCompatActivity {
     Canvas canvas;
     Paint mPaint = new Paint();
     Bitmap latestFrame;
-    Bitmap annotatedFrame;
-    ArrayList<Bitmap> frameBuffer;
+    Pose latestPose;
 
-    private boolean isRunning = false;
+    PoseDetector poseDetector;
+    Runnable RunMLKit;
+
+    private boolean running = false;
 
     @ExperimentalGetImage @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,16 @@ public class FaceTrackingActivity extends AppCompatActivity {
         mPaint.setStrokeWidth(10);
 
         getCameraPermission();
+
+        PoseDetectorOptions options =
+                new PoseDetectorOptions.Builder()
+                        .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
+                        .build();
+        poseDetector = PoseDetection.getClient(options);
+
+        RunMLKit = () -> poseDetector.process(InputImage.fromBitmap(latestFrame, 0)).addOnSuccessListener((Pose pose)->{
+            latestPose=pose;
+        });
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         cameraProviderFuture.addListener(()-> {
@@ -93,7 +110,19 @@ public class FaceTrackingActivity extends AppCompatActivity {
                 Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap,0,0,imageProxy.getWidth(), imageProxy.getHeight(),matrix,false);
 
                 latestFrame = rotatedBitmap;
-                display.setBitmap(latestFrame);
+                if(!running && latestPose == null){
+                    RunMLKit.run();
+                    running = true;
+                }
+                if(latestPose!=null && running){
+                    canvas = new Canvas(latestFrame);
+                    for(PoseLandmark lm: latestPose.getAllPoseLandmarks()){
+                        canvas.drawCircle(lm.getPosition().x, lm.getPosition().y, 5, mPaint);
+                    }
+                    running = false;
+                    latestPose = null;
+                    display.setBitmap(latestFrame);
+                }
                 imageProxy.close();
             }
         });
