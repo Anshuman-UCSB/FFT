@@ -112,10 +112,17 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
                 Pose p = imageProcessor.detect(frame);
                 if(p!= null){
                     Log.i(TAG, "Landmarks: "+p.getPoseLandmark(PoseLandmark.NOSE));
+                    drawPose(graphicOverlay, p);
                 }
                 processing = false;
             }
         }
+    }
+
+    private void drawPose(GraphicOverlay graphicOverlay, Pose pose) {
+        graphicOverlay.clear();
+        graphicOverlay.add(new PoseGraphic(graphicOverlay, pose));
+        graphicOverlay.postInvalidate();
     }
 
 
