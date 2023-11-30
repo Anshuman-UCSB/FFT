@@ -53,7 +53,7 @@ public class CustomPoseDetector {
 
 
     public void updateStatus(){
-        statusText.setText(cache.keySet().size()+"/"+taskQueue.size());
+        statusText.setText(cache.keySet().size()+"/"+taskQueue.size()+"/"+pending.size());
     }
 
     private void startProcessingThread() {
@@ -99,8 +99,12 @@ public class CustomPoseDetector {
     }
 
     public void queue(Bitmap bitmap){
-        if(pending.add(hashBitmap(bitmap)))
+        if(pending.add(hashBitmap(bitmap))){
             taskQueue.offer(bitmap);
+            Log.v(TAG, "new frame "+hashBitmap(bitmap));
+        }else{
+            Log.v(TAG, "Redundant frame "+hashBitmap(bitmap));
+        }
         updateStatus();
     }
 

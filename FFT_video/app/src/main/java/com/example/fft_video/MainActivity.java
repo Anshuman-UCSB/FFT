@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseLandmark;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.FrameListener{
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         setupPlayer(uri);
+                        preprocessVideo(uri);
                     } else {
                         Log.d("PhotoPicker", "No media selected");
                     }
@@ -68,6 +71,33 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
         findViewById(R.id.selectVidBtn).setOnClickListener( v -> {
             startSelectVideo();
         });
+    }
+
+    private void preprocessVideo(Uri uri) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(this, uri); // Set your media item path or Uri
+
+        // Get the duration of the video in microseconds
+        String duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        long videoDuration = Long.parseLong(duration) * 1000;
+
+        // Set the time interval for frame extraction
+        long interval = 10000; // Set your desired interval in microseconds
+        for (long time = 0; time < videoDuration; time += interval) {
+            Bitmap frame = retriever.getFrameAtTime(time, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+
+            // Process the 'frame' bitmap using your custom function
+            imageProcessor.queue(frame);
+        }
+        Log.i(TAG, "Set all frames to be preprocessed");
+        imageProcessor.updateStatus();
+
+        // Release the MediaMetadataRetriever
+        try {
+            retriever.release();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -109,11 +139,11 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
                     graphicOverlay.setImageSourceInfo(frameWidth, frameHeight, false);
                 }
 //                Log.i(TAG, "procesed frame: "+imageProcessor.detect(frame));
-                Pose p = imageProcessor.detect(frame);
-                if(p!= null){
-                    Log.i(TAG, "Landmarks: "+p.getPoseLandmark(PoseLandmark.NOSE));
-                    drawPose(graphicOverlay, p);
-                }
+//                Pose p = imageProcessor.detect(frame);
+//                if(p!= null){
+//                    Log.i(TAG, "Landmarks: "+p.getPoseLandmark(PoseLandmark.NOSE));
+//                    drawPose(graphicOverlay, p);
+//                }
                 processing = false;
             }
         }
@@ -129,5 +159,6 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     @Override
     public void onFrame(Bitmap bitmap) {
         processFrame(bitmap);
+        imageProcessor.updateStatus();
     }
 }
