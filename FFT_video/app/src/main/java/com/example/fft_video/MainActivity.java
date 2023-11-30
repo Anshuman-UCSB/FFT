@@ -17,8 +17,13 @@ import com.example.fft_video.gles.GlPlayerRenderer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.mlkit.vision.pose.Pose;
+import com.google.mlkit.vision.pose.PoseLandmark;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.FrameListener{
+    private static final String TAG = "FFT";
     private SimpleExoPlayer player;
     private PlayerView playerView;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        imageProcessor = new CustomPoseDetector(this);
 
         player = new SimpleExoPlayer.Builder(this).build();
 
@@ -61,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
         findViewById(R.id.selectVidBtn).setOnClickListener( v -> {
             startSelectVideo();
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        imageProcessor.destroy();
     }
 
     private void startSelectVideo() {
@@ -95,18 +108,16 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
                     frameHeight = frame.getHeight();
                     graphicOverlay.setImageSourceInfo(frameWidth, frameHeight, false);
                 }
-//                imageProcessor.setOnProcessingCompleteListener(new VisionProcessorBase.OnProcessingCompleteListener() {
-//                    @Override
-//                    public void onProcessingComplete() {
-//                        processing = false;
-////                        onProcessComplete(frame);
-//                        if(pending) processFrame(lastFrame);
-//                    }
-//                });
-//                imageProcessor.processBitmap(frame, graphicOverlay);
+//                Log.i(TAG, "procesed frame: "+imageProcessor.detect(frame));
+                Pose p = imageProcessor.detect(frame);
+                if(p!= null){
+                    Log.i(TAG, "Landmarks: "+p.getPoseLandmark(PoseLandmark.NOSE));
+                }
+                processing = false;
             }
         }
     }
+
 
     @Override
     public void onFrame(Bitmap bitmap) {
