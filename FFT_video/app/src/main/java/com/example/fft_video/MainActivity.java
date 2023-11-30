@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.mlkit.vision.pose.Pose;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.FrameListener, IVideoFrameExtractor {
@@ -77,10 +79,24 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
         });
     }
 
+    private String getFilePathFromUri(Uri uri){
+        String filePath = null;
+        if (uri != null && "content".equals(uri.getScheme())) {
+            Cursor cursor = this.getContentResolver().query(uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+            cursor.moveToFirst();
+            filePath = cursor.getString(0);
+            cursor.close();
+        } else {
+            filePath = uri.getPath();
+        }
+        return filePath;
+    }
+
     private void preprocessVideo(Uri uri) {
 //            imageProcessor.queue(frame);
         try {
-            frameExtractor.extractFrames(uri.getPath());
+//            Log.i(TAG, "Should I kill myself: "+f.canRead()+" - uri is "+uri.toString());
+            frameExtractor.extractFrames(getFilePathFromUri(uri));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -153,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     @Override
     public void onCurrentFrameExtracted(@NonNull Frame currentFrame) {
         imageProcessor.queue(frameExtractor.fromBufferToBitmap(currentFrame));
+        // TODO: Figure out a way to extract frames more efficiently
+        Log.i(TAG, "Frame added to queue");
     }
 
     @Override
