@@ -1,6 +1,6 @@
-package com.ducky.fastvideoframeextraction.decoder
+package com.example.fft_video.decoder
 
-import java.nio.ByteBuffer
+import com.example.fft_video.decoder.Frame
 
 /**
  * Created by Duc Ky Ngo on 9/13/2021.

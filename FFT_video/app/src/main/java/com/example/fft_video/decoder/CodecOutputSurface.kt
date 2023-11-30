@@ -1,4 +1,4 @@
-package com.ducky.fastvideoframeextraction.decoder
+package com.example.fft_video.decoder
 
 import android.graphics.SurfaceTexture
 import android.opengl.EGL14

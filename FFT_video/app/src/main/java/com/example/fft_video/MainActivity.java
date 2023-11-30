@@ -3,15 +3,19 @@ package com.example.fft_video;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.example.fft_video.decoder.IVideoFrameExtractor;
+import com.example.fft_video.decoder.Frame;
+import com.example.fft_video.decoder.FrameExtractor;
 import com.example.fft_video.gles.GlPlayerView;
 import com.example.fft_video.gles.GlPlayerRenderer;
 
@@ -19,12 +23,10 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.mlkit.vision.pose.Pose;
-import com.google.mlkit.vision.pose.PoseLandmark;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.FrameListener{
+public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.FrameListener, IVideoFrameExtractor {
     private static final String TAG = "FFT";
     private SimpleExoPlayer player;
     private PlayerView playerView;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     private boolean pending;
     private Bitmap lastFrame;
     private CustomPoseDetector imageProcessor;
+    private FrameExtractor frameExtractor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
         setContentView(R.layout.activity_main);
 
         imageProcessor = new CustomPoseDetector(this);
+        frameExtractor = new FrameExtractor(this);
 
         player = new SimpleExoPlayer.Builder(this).build();
 
@@ -74,30 +78,14 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     }
 
     private void preprocessVideo(Uri uri) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(this, uri); // Set your media item path or Uri
-
-        // Get the duration of the video in microseconds
-        String duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        long videoDuration = Long.parseLong(duration) * 1000;
-
-        // Set the time interval for frame extraction
-        long interval = 10000; // Set your desired interval in microseconds
-        for (long time = 0; time < videoDuration; time += interval) {
-            Bitmap frame = retriever.getFrameAtTime(time, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-
-            // Process the 'frame' bitmap using your custom function
-            imageProcessor.queue(frame);
-        }
-        Log.i(TAG, "Set all frames to be preprocessed");
-        imageProcessor.updateStatus();
-
-        // Release the MediaMetadataRetriever
+//            imageProcessor.queue(frame);
         try {
-            retriever.release();
+            frameExtractor.extractFrames(uri.getPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Log.i(TAG, "Set all frames to be preprocessed");
+        imageProcessor.updateStatus();
     }
 
     @Override
@@ -160,5 +148,15 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     public void onFrame(Bitmap bitmap) {
         processFrame(bitmap);
         imageProcessor.updateStatus();
+    }
+
+    @Override
+    public void onCurrentFrameExtracted(@NonNull Frame currentFrame) {
+        imageProcessor.queue(frameExtractor.fromBufferToBitmap(currentFrame));
+    }
+
+    @Override
+    public void onAllFrameExtracted(int processedFrameCount, long processedTimeMs) {
+
     }
 }

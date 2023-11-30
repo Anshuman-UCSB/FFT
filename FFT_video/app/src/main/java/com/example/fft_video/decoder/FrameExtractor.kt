@@ -1,9 +1,12 @@
-package com.ducky.fastvideoframeextraction.decoder
+package com.example.fft_video.decoder
 
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.media.MediaCodec
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.media.MediaMetadataRetriever
+import android.util.DisplayMetrics
 import android.util.Log
 import java.io.File
 import java.io.FileNotFoundException
@@ -164,6 +167,15 @@ class FrameExtractor(private val listener: IVideoFrameExtractor) {
         return -1
     }
 
+    fun fromBufferToBitmap(frame: Frame): Bitmap? {
+        val result = Bitmap.createBitmap(frame.width, frame.height, Bitmap.Config.ARGB_8888)
+        frame.byteBuffer.rewind()
+        result.copyPixelsFromBuffer(frame.byteBuffer)
+        val transformMatrix = Matrix()
+        val outputBitmap = Bitmap.createBitmap(result, 0, 0, result.width, result.height, transformMatrix, false)
+        outputBitmap.density = DisplayMetrics.DENSITY_DEFAULT
+        return outputBitmap
+    }
     /**
      * Work loop.
      */
@@ -273,7 +285,8 @@ class FrameExtractor(private val listener: IVideoFrameExtractor) {
         }
         val totalSavedFrames = if ((MAX_FRAMES < decodeCount)) MAX_FRAMES else decodeCount
 
-        if (verbose) Log.d(TAG, ("Total saved frames: $totalSavedFrames  " +
+        if (verbose) Log.d(
+            TAG, ("Total saved frames: $totalSavedFrames  " +
                 "| Total time: ${totalSavingTimeNs / 1000000} ms  " +
                 "| Each frame took: ${(totalSavingTimeNs / totalSavedFrames / 1000)} us "))
 
