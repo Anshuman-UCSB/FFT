@@ -22,6 +22,14 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     private SimpleExoPlayer player;
     private PlayerView playerView;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private GraphicOverlay graphicOverlay;
+
+    private int frameWidth, frameHeight;
+
+    private boolean processing;
+    private boolean pending;
+    private Bitmap lastFrame;
+    private CustomPoseDetector imageProcessor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
         FrameLayout contentFrame = playerView.findViewById(com.google.android.exoplayer2.ui.R.id.exo_content_frame);
         View videoFrameView = createVideoFrameView();
         if(videoFrameView != null) contentFrame.addView(videoFrameView);
+
+        graphicOverlay = new GraphicOverlay(this, null);
+        contentFrame.addView(graphicOverlay);
 
         pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     // Callback is invoked after the user selects a media item or closes the
@@ -73,8 +84,32 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
         player.play();
     }
 
+    private void processFrame(Bitmap frame){
+        lastFrame = frame;
+        if(imageProcessor != null){
+            pending = processing;
+            if(!processing){
+                processing = true;
+                if(frameWidth != frame.getWidth() || frameHeight != frame.getHeight()){
+                    frameWidth = frame.getWidth();
+                    frameHeight = frame.getHeight();
+                    graphicOverlay.setImageSourceInfo(frameWidth, frameHeight, false);
+                }
+//                imageProcessor.setOnProcessingCompleteListener(new VisionProcessorBase.OnProcessingCompleteListener() {
+//                    @Override
+//                    public void onProcessingComplete() {
+//                        processing = false;
+////                        onProcessComplete(frame);
+//                        if(pending) processFrame(lastFrame);
+//                    }
+//                });
+//                imageProcessor.processBitmap(frame, graphicOverlay);
+            }
+        }
+    }
+
     @Override
     public void onFrame(Bitmap bitmap) {
-
+        processFrame(bitmap);
     }
 }
