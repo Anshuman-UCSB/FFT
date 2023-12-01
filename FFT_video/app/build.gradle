@@ -7,6 +7,10 @@ android {
     namespace 'com.example.fft_video'
     compileSdk 34
 
+    packagingOptions {
+        exclude 'META-INF/native-image/**'
+    }
+
     defaultConfig {
         applicationId "com.example.fft_video"
         minSdk 29
@@ -43,7 +47,6 @@ dependencies {
     // for the video player
     implementation "com.google.android.exoplayer:exoplayer:2.14.2"
 
-    // ffmpeg extractor
-    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-core:1.0.19'
-    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-native:1.0.19'
+    // JavaCV
+    implementation group: 'org.bytedeco', name: 'javacv-platform', version: '1.5.9'
 }
