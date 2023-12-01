@@ -24,7 +24,7 @@ class FrameExtractor(private val listener: IVideoFrameExtractor) {
     private val frameCount = Int.MAX_VALUE
     private val SDK_VERSION_INT = android.os.Build.VERSION.SDK_INT
 
-    private val verbose = false
+    private val verbose = true
     private var MAX_FRAMES = 0
 
     var isPortrait = false
@@ -54,7 +54,7 @@ class FrameExtractor(private val listener: IVideoFrameExtractor) {
             }
 
             extractor = MediaExtractor()
-            extractor.setDataSource(inputFile.toString())
+            extractor.setDataSource(inputFilePath)
             val trackIndex = selectTrack(extractor)
             if (trackIndex < 0) {
                 throw IOException("No video track found in $inputFile")
