@@ -14,9 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.example.fft_video.decoder.IVideoFrameExtractor;
-import com.example.fft_video.decoder.Frame;
-import com.example.fft_video.decoder.FrameExtractor;
 import com.example.fft_video.gles.GlPlayerView;
 import com.example.fft_video.gles.GlPlayerRenderer;
 
@@ -28,12 +25,13 @@ import com.google.mlkit.vision.pose.Pose;
 import java.io.File;
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.FrameListener, IVideoFrameExtractor {
+public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.FrameListener {
     private static final String TAG = "FFT";
     private SimpleExoPlayer player;
     private PlayerView playerView;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private GraphicOverlay graphicOverlay;
+    private FrameExtractor frameExtractor;
 
     private int frameWidth, frameHeight;
 
@@ -41,15 +39,14 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     private boolean pending;
     private Bitmap lastFrame;
     private CustomPoseDetector imageProcessor;
-    private FrameExtractor frameExtractor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        imageProcessor = new CustomPoseDetector(this);
         frameExtractor = new FrameExtractor(this);
+        imageProcessor = new CustomPoseDetector(this);
 
         player = new SimpleExoPlayer.Builder(this).build();
 
@@ -93,13 +90,7 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     }
 
     private void preprocessVideo(Uri uri) {
-//            imageProcessor.queue(frame);
-        try {
-//            Log.i(TAG, "Should I kill myself: "+f.canRead()+" - uri is "+uri.toString());
-            frameExtractor.extractFrames(getFilePathFromUri(uri));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Log.i(TAG, "extracted frames: "+frameExtractor.extractFrames(uri).size());
         Log.i(TAG, "Set all frames to be preprocessed");
         imageProcessor.updateStatus();
     }
@@ -166,15 +157,4 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
         imageProcessor.updateStatus();
     }
 
-    @Override
-    public void onCurrentFrameExtracted(@NonNull Frame currentFrame) {
-        imageProcessor.queue(frameExtractor.fromBufferToBitmap(currentFrame));
-        // TODO: Figure out a way to extract frames more efficiently
-        Log.i(TAG, "Frame added to queue");
-    }
-
-    @Override
-    public void onAllFrameExtracted(int processedFrameCount, long processedTimeMs) {
-
-    }
 }

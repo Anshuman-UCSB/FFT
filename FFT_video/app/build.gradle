@@ -40,6 +40,10 @@ dependencies {
 
     implementation 'com.google.mlkit:pose-detection-accurate:18.0.0-beta3'
 
-
+    // for the video player
     implementation "com.google.android.exoplayer:exoplayer:2.14.2"
+
+    // ffmpeg extractor
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-core:1.0.19'
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-native:1.0.19'
 }
