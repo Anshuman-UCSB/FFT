@@ -1,4 +1,4 @@
-package com.ffr.pose_video;
+package com.fft.pose_video;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.ffr.pose_video", appContext.getPackageName());
+        assertEquals("com.fft.pose_video", appContext.getPackageName());
     }
 }

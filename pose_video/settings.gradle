@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "pose_video"
+rootProject.name = "Pose_video"
 include ':app'

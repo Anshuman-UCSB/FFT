@@ -1,4 +1,4 @@
-package com.ffr.pose_video;
+package com.fft.pose_video;
 
 import androidx.appcompat.app.AppCompatActivity;
 
