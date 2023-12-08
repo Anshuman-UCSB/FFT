@@ -5,34 +5,43 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
+import org.jcodec.api.FrameGrab;
+import org.jcodec.api.JCodecException;
+import org.jcodec.common.io.NIOUtils;
+import org.jcodec.common.model.Picture;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class FrameExtractor {
     private static final String TAG = "FrameExtractor";
-    private final FFmpegMediaMetadataRetriever retriever;
     private Context context;
     public FrameExtractor(Context context){
         this.context = context;
-        retriever = new FFmpegMediaMetadataRetriever();
     }
-    public List<Bitmap> extractFrames(Uri videoUri) {
+    public List<Bitmap> extractFrames(String path) {
         List<Bitmap> frames = new ArrayList<>();
-
-        retriever.setDataSource(context, videoUri);
-        String duration = retriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION);
-        long videoDuration = Long.parseLong(duration) * 1000; // in microseconds
-        Log.i(TAG, "Duration is "+videoDuration+"us");
-        Log.i(TAG, "KEY FRAMERATE is "+retriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_FRAMERATE));
-
-        for (long time = 0; time < videoDuration; time += 100000) { // Extract frame every second
-            Bitmap frame = retriever.getFrameAtTime(time, FFmpegMediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-            frames.add(frame);
+        File file = new File(path);
+        FrameGrab grab = null;
+        try {
+            grab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(file));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (JCodecException e) {
+            throw new RuntimeException(e);
         }
-
-        retriever.release();
+        Picture picture;
+        while (true) {
+            try {
+                if (!(null != (picture = grab.getNativeFrame()))) break;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Log.i(TAG, (picture.getWidth() + "x" + picture.getHeight() + " " + picture.getColor()));
+        }
         return frames;
     }
 }

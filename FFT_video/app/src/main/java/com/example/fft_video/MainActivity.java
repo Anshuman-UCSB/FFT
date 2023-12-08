@@ -23,7 +23,10 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.mlkit.vision.pose.Pose;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.FrameListener {
     private static final String TAG = "FFT";
@@ -76,6 +79,30 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
         });
     }
 
+    private String saveLocalCopy(Uri uri){
+        String dirPath = getApplicationContext().getFilesDir().getParentFile().getPath()+"/tmpvid.mp4";
+
+        try (InputStream ins = getContentResolver().openInputStream(uri)) {
+
+            File dest = new File(dirPath);
+
+            try (OutputStream os = new FileOutputStream(dest)) {
+                byte[] buffer = new byte[4096];
+                int length;
+                while ((length = ins.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+                os.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dirPath;
+    }
+
     private String getFilePathFromUri(Uri uri){
         String filePath = null;
         if (uri != null && "content".equals(uri.getScheme())) {
@@ -90,8 +117,12 @@ public class MainActivity extends AppCompatActivity implements GlPlayerRenderer.
     }
 
     private void preprocessVideo(Uri uri) {
-        Log.i(TAG, "extracted frames: "+frameExtractor.extractFrames(uri).size());
-        Log.i(TAG, "Set all frames to be preprocessed");
+        String path = saveLocalCopy(uri);
+        Log.i(TAG, path);
+        File f = new File(path);
+        Log.i(TAG, f.canRead()+" - can read "+f.getPath());
+        Log.i(TAG, "extracted frames: "+frameExtractor.extractFrames(path).size());
+//        Log.i(TAG, "Set all frames to be preprocessed");
         imageProcessor.updateStatus();
     }
 
