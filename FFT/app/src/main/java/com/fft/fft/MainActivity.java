@@ -1,6 +1,7 @@
 package com.fft.fft;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     TextView greeter;
     FirebaseUser user;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +31,9 @@ public class MainActivity extends AppCompatActivity {
         if (user == null){
             goToLogin();
         }
-        greeter.setText(user.getEmail());
-
+        greeter.setText(user.getDisplayName());
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         button.setOnClickListener(v->{
             auth.signOut();
             goToLogin();

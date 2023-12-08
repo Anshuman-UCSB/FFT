@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,11 +34,11 @@ import java.util.HashMap;
 
 public class Login extends AppCompatActivity {
     private static final String TAG = "FFT_Login";
-    TextInputEditText editTextEmail, editTextPassword;
-    Button buttonLogin;
+    SignInButton buttonLogin;
     FirebaseAuth auth;
     FirebaseDatabase database;
     GoogleSignInClient mGoogleSignInClient;
+    ProgressBar pbar;
     int RC_SIGN_IN = 20;
 
     @Override
@@ -59,6 +60,7 @@ public class Login extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         buttonLogin = findViewById(R.id.btn_login);
+        pbar = findViewById(R.id.pbar);
         database = FirebaseDatabase.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -73,6 +75,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void googleSignIn() {
+        pbar.setVisibility(View.VISIBLE);
         Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent, RC_SIGN_IN);
     }
@@ -108,6 +111,7 @@ public class Login extends AppCompatActivity {
 
                             database.getReference().child("users").child(user.getUid()).setValue(map);
                             Intent intent = new Intent(Login.this, MainActivity.class);
+                            pbar.setVisibility(View.GONE);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
