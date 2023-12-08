@@ -1,5 +1,7 @@
 package com.fft.pose_video;
 
+import static com.fft.pose_video.utils.getSizeForDesiredSize;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,6 +22,7 @@ import android.widget.FrameLayout;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.mlkit.vision.pose.Pose;
 
 public class MainActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener {
     private static final String TAG = "FFT_main";
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     private Surface playerSurface;
     private SurfaceTexture surfaceTexture;
     private GraphicOverlay graphicOverlay;
+
+    private int frameWidth, frameHeight;
 
     private CustomPoseDetector imageProcessor;
 
@@ -115,18 +120,21 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     }
 
     private void processFrame(Bitmap bitmap) {
-        imageProcessor.getPose(bitmap);
+        if(frameWidth != bitmap.getWidth() || frameHeight != bitmap.getHeight()){
+            frameWidth = bitmap.getWidth();
+            frameHeight = bitmap.getHeight();
+            graphicOverlay.setImageSourceInfo(frameWidth, frameHeight, false);
+        }
+        imageProcessor.requestPose(bitmap, pose->{
+            graphicOverlay.clear();
+            graphicOverlay.add(new PoseGraphic(
+                    graphicOverlay,
+                    pose,
+                    true,
+                    true
+            ));
+            graphicOverlay.postInvalidate();
+        });
     }
 
-    private Size getSizeForDesiredSize(int width, int height, int desiredSize){
-        int w, h;
-        if(width > height){
-            w = desiredSize;
-            h = Math.round((height/(float)width) * w);
-        }else{
-            h = desiredSize;
-            w = Math.round((width/(float)height) * h);
-        }
-        return new Size(w, h);
-    }
 }

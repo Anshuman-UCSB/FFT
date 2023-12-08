@@ -40,14 +40,11 @@ public class PoseGraphic extends GraphicOverlay.Graphic {
   private static final float POSE_CLASSIFICATION_TEXT_SIZE = 60.0f;
 
   private final Pose pose;
-  private final boolean showInFrameLikelihood;
   private final boolean visualizeZ;
   private final boolean rescaleZForVisualization;
   private float zMin = Float.MAX_VALUE;
   private float zMax = Float.MIN_VALUE;
 
-  private final List<String> poseClassification;
-  private final Paint classificationTextPaint;
   private final Paint leftPaint;
   private final Paint rightPaint;
   private final Paint whitePaint;
@@ -55,21 +52,12 @@ public class PoseGraphic extends GraphicOverlay.Graphic {
   PoseGraphic(
       GraphicOverlay overlay,
       Pose pose,
-      boolean showInFrameLikelihood,
       boolean visualizeZ,
-      boolean rescaleZForVisualization,
-      List<String> poseClassification) {
+      boolean rescaleZForVisualization) {
     super(overlay);
     this.pose = pose;
-    this.showInFrameLikelihood = showInFrameLikelihood;
     this.visualizeZ = visualizeZ;
     this.rescaleZForVisualization = rescaleZForVisualization;
-
-    this.poseClassification = poseClassification;
-    classificationTextPaint = new Paint();
-    classificationTextPaint.setColor(Color.WHITE);
-    classificationTextPaint.setTextSize(POSE_CLASSIFICATION_TEXT_SIZE);
-    classificationTextPaint.setShadowLayer(5.0f, 0f, 0f, Color.BLACK);
 
     whitePaint = new Paint();
     whitePaint.setStrokeWidth(STROKE_WIDTH);
@@ -88,18 +76,6 @@ public class PoseGraphic extends GraphicOverlay.Graphic {
     List<PoseLandmark> landmarks = pose.getAllPoseLandmarks();
     if (landmarks.isEmpty()) {
       return;
-    }
-
-    // Draw pose classification text.
-    float classificationX = POSE_CLASSIFICATION_TEXT_SIZE * 0.5f;
-    for (int i = 0; i < poseClassification.size(); i++) {
-      float classificationY = (canvas.getHeight() - POSE_CLASSIFICATION_TEXT_SIZE * 1.5f
-          * (poseClassification.size() - i));
-      canvas.drawText(
-          poseClassification.get(i),
-          classificationX,
-          classificationY,
-          classificationTextPaint);
     }
 
     // Draw all the points
@@ -187,19 +163,9 @@ public class PoseGraphic extends GraphicOverlay.Graphic {
     drawLine(canvas, rightAnkle, rightHeel, rightPaint);
     drawLine(canvas, rightHeel, rightFootIndex, rightPaint);
 
-    // Draw inFrameLikelihood for all points
-    if (showInFrameLikelihood) {
-      for (PoseLandmark landmark : landmarks) {
-        canvas.drawText(
-            String.format(Locale.US, "%.2f", landmark.getInFrameLikelihood()),
-            translateX(landmark.getPosition().x),
-            translateY(landmark.getPosition().y),
-            whitePaint);
-      }
-    }
   }
 
-    void drawPoint(Canvas canvas, PoseLandmark landmark, Paint paint) {
+  void drawPoint(Canvas canvas, PoseLandmark landmark, Paint paint) {
     PointF3D point = landmark.getPosition3D();
     maybeUpdatePaintColor(paint, canvas, point.getZ());
     canvas.drawCircle(translateX(point.getX()), translateY(point.getY()), DOT_RADIUS, paint);
