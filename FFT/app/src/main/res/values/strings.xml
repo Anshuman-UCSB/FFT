@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">FFT</string>
-    <string name="login">Login</string>
+    <string name="login">Login to FFT</string>
     <string name="email">Email</string>
     <string name="password">password</string>
     <string name="register">Register</string>
     <string name="click_to_login">Click to login</string>
     <string name="click_to_register">Click to register</string>
     <string name="logout">Logout</string>
+    <string name="navigation_drawer_open">Drawer Open</string>
+    <string name="navigation_drawer_close">Drawer Closed</string>
+    <string name="drawer_item_home">home</string>
 </resources>
