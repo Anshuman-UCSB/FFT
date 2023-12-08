@@ -79,13 +79,13 @@ public class PoseGraphic extends GraphicOverlay.Graphic {
     }
 
     // Draw all the points
-    for (PoseLandmark landmark : landmarks) {
-      drawPoint(canvas, landmark, whitePaint);
-      if (visualizeZ && rescaleZForVisualization) {
-        zMin = min(zMin, landmark.getPosition3D().getZ());
-        zMax = max(zMax, landmark.getPosition3D().getZ());
-      }
-    }
+//    for (PoseLandmark landmark : landmarks) {
+//      drawPoint(canvas, landmark, whitePaint);
+//      if (visualizeZ && rescaleZForVisualization) {
+//        zMin = min(zMin, landmark.getPosition3D().getZ());
+//        zMax = max(zMax, landmark.getPosition3D().getZ());
+//      }
+//    }
 
     PoseLandmark nose = pose.getPoseLandmark(PoseLandmark.NOSE);
     PoseLandmark lefyEyeInner = pose.getPoseLandmark(PoseLandmark.LEFT_EYE_INNER);
@@ -122,17 +122,6 @@ public class PoseGraphic extends GraphicOverlay.Graphic {
     PoseLandmark rightHeel = pose.getPoseLandmark(PoseLandmark.RIGHT_HEEL);
     PoseLandmark leftFootIndex = pose.getPoseLandmark(PoseLandmark.LEFT_FOOT_INDEX);
     PoseLandmark rightFootIndex = pose.getPoseLandmark(PoseLandmark.RIGHT_FOOT_INDEX);
-
-    // Face
-    drawLine(canvas, nose, lefyEyeInner, whitePaint);
-    drawLine(canvas, lefyEyeInner, lefyEye, whitePaint);
-    drawLine(canvas, lefyEye, leftEyeOuter, whitePaint);
-    drawLine(canvas, leftEyeOuter, leftEar, whitePaint);
-    drawLine(canvas, nose, rightEyeInner, whitePaint);
-    drawLine(canvas, rightEyeInner, rightEye, whitePaint);
-    drawLine(canvas, rightEye, rightEyeOuter, whitePaint);
-    drawLine(canvas, rightEyeOuter, rightEar, whitePaint);
-    drawLine(canvas, leftMouth, rightMouth, whitePaint);
 
     drawLine(canvas, leftShoulder, rightShoulder, whitePaint);
     drawLine(canvas, leftHip, rightHip, whitePaint);

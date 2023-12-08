@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                     graphicOverlay,
                     pose,
                     true,
-                    true
+                    false
             ));
             graphicOverlay.postInvalidate();
         });

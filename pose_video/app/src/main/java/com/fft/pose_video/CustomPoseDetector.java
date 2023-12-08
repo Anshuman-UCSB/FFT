@@ -3,6 +3,7 @@ package com.fft.pose_video;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.pose.Pose;
@@ -35,12 +36,9 @@ public class CustomPoseDetector {
         Log.i(TAG, "CustomPoseDetector initialized");
     }
 
-    public Pose getPose(Bitmap bitmap){
+    public void requestPose(Bitmap bitmap, OnSuccessListener<? super Pose> listener){
         InputImage image = InputImage.fromBitmap(bitmap, 0);
         Task<Pose> result = poseDetector.process(image)
-                .addOnSuccessListener(p->{
-                   Log.i(TAG,"processed "+p);
-                });
-        return null;
+                .addOnSuccessListener(listener);
     }
 }
