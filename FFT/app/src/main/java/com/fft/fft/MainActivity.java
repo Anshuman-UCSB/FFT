@@ -15,8 +15,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.widget.AccountHeaderView;
 import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 
 import java.util.List;
@@ -52,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.root);
         slider = findViewById(R.id.slider);
+
+
+
         drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
