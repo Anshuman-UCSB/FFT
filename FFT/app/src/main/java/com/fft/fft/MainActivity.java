@@ -26,10 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "FFT_main";
     private FirebaseAuth auth;
-    private Button button;
-    private TextView greeter;
     private FirebaseUser user;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
             goToLogin();
         }
 
-        button = findViewById(R.id.logout);
-        greeter = findViewById(R.id.greeter);
+        Button button = findViewById(R.id.logout);
+        TextView greeter = findViewById(R.id.greeter);
         greeter.setText(user.getDisplayName());
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         setupDrawer(toolbar);
@@ -84,9 +81,14 @@ public class MainActivity extends AppCompatActivity {
         );
         slider.setOnDrawerItemClickListener((v,di,p) ->{
             Log.i(TAG, "Item clicked "+di+" at pos "+p);
+            processClick(p);
             return false;
         });
         slider.setSelectionAtPosition(0);
+    }
+
+    private void processClick(int pos){
+
     }
 
     private SectionDrawerItem makeSection(String name, long id, boolean divider) {
