@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         slider.getItemAdapter().add(
                 makeItem("Home", R.drawable.home, 1, true),
                 makeSection("ML Coaching", 102, true),
-                makeItem("Bench", R.drawable.home, 2, false),
-                makeItem("Squat", R.drawable.home, 3, false),
-                makeItem("Deadlift", R.drawable.home, 4, false)
+                makeItem("Bench", R.drawable.exercise_24px, 2, false),
+                makeItem("Squat", R.drawable.exercise_24px, 3, false),
+                makeItem("Deadlift", R.drawable.exercise_24px, 4, false)
         );
 
         slider.getFooterAdapter().add(
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Item clicked "+di+" at pos "+p);
             return false;
         });
+        slider.setSelectionAtPosition(0);
     }
 
     private SectionDrawerItem makeSection(String name, long id, boolean divider) {
@@ -96,10 +97,11 @@ public class MainActivity extends AppCompatActivity {
         return coaching;
     }
 
-    private AbstractBadgeableDrawerItem<?> makeItem(String name, int icon, long id, boolean primary){
+    private AbstractBadgeableDrawerItem<?> makeItem(String name, Integer icon, long id, boolean primary){
         AbstractBadgeableDrawerItem<?> n = primary?(new PrimaryDrawerItem()):(new SecondaryDrawerItem());
         n.setName(new StringHolder(name));
-        n.setIcon(new ImageHolder(icon));
+        if(icon!=null)
+            n.setIcon(new ImageHolder(icon));
         n.setIdentifier(id);
         return n;
     }

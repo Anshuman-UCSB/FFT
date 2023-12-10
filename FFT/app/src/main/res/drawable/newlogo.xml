@@ -5,26 +5,26 @@
     android:viewportHeight="200">
   <path
       android:pathData="M30,50h60v20h-60z"
-      android:fillColor="#00ffff"/>
+      android:fillColor="@color/primaryColor"/>
   <path
       android:pathData="M70,50h20v100h-20z"
-      android:fillColor="#00ffff"/>
+      android:fillColor="@color/primaryColor"/>
   <path
       android:pathData="M50,90h20v20h-20z"
-      android:fillColor="#00ffff"/>
+      android:fillColor="@color/primaryColor"/>
   <path
       android:pathData="M90,30h20v120h-20z"
-      android:fillColor="#0000ff"/>
+      android:fillColor="@color/secondaryColor"/>
   <path
       android:pathData="M30,30h140v20h-140z"
-      android:fillColor="#0000ff"/>
+      android:fillColor="@color/secondaryColor"/>
   <path
       android:pathData="M110,50h60v20h-60z"
-      android:fillColor="#00ffff"/>
+      android:fillColor="@color/primaryColor"/>
   <path
       android:pathData="M110,50h20v100h-20z"
-      android:fillColor="#00ffff"/>
+      android:fillColor="@color/primaryColor"/>
   <path
       android:pathData="M130,90h20v20h-20z"
-      android:fillColor="#00ffff"/>
+      android:fillColor="@color/primaryColor"/>
 </vector>

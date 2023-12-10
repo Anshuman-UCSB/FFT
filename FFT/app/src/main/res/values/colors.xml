@@ -3,5 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primaryColor">#17ABE7</color>
-<!--    <color name="secondaryColor">#B51919</color>-->
+    <color name="secondaryColor">#086CBC</color>
+    <!--    <color name="secondaryColor">#B51919</color>-->
 </resources>
