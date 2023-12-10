@@ -19,7 +19,6 @@ import com.mikepenz.materialdrawer.model.AbstractBadgeableDrawerItem;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         MaterialDrawerSliderView slider = findViewById(R.id.slider);
         slider.getItemAdapter().add(
                 makeItem("Home", R.drawable.home, 1, true),
-                makeSection("ML Coaching", 101),
+                makeSection("ML Coaching", 102, true),
                 makeItem("Bench", R.drawable.home, 2, false),
                 makeItem("Squat", R.drawable.home, 3, false),
                 makeItem("Deadlift", R.drawable.home, 4, false)
@@ -89,15 +88,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private SectionDrawerItem makeSection(String name, long id) {
+    private SectionDrawerItem makeSection(String name, long id, boolean divider) {
         SectionDrawerItem coaching = new SectionDrawerItem();
         coaching.setName(new StringHolder(name));
-//        coaching.setDivider(true);
+        coaching.setDivider(divider);
         coaching.setIdentifier(id);
         return coaching;
     }
 
-    private AbstractBadgeableDrawerItem makeItem(String name, int icon, long id, boolean primary){
+    private AbstractBadgeableDrawerItem<?> makeItem(String name, int icon, long id, boolean primary){
         AbstractBadgeableDrawerItem<?> n = primary?(new PrimaryDrawerItem()):(new SecondaryDrawerItem());
         n.setName(new StringHolder(name));
         n.setIcon(new ImageHolder(icon));
