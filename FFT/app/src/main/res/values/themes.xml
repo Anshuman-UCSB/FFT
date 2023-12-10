@@ -3,12 +3,11 @@
     <style name="Base.Theme.FFT" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
-<!--        <item name="colorPrimaryVariant">@color/primaryColor</item>-->
-<!--        <item name="colorOnPrimary">@color/primaryColor</item>-->
         <item name="colorSecondary">@color/secondaryColor</item>
-<!--        <item name="colorSecondaryVariant">@color/secondaryColor</item>-->
-<!--        <item name="colorOnSecondary">@color/secondaryColor</item>-->
-
+        <item name="colorTertiary">@color/tertiaryColor</item>
+<!--        <item name="colorSurface">@color/tertiaryColor</item>-->
+<!--        <item name="colorOnSurfaceVariant">@color/primaryColor</item>-->
+<!--        <item name="backgroundColor">@color/background</item>-->
         <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
         <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
     </style>

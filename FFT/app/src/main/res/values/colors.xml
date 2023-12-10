@@ -4,5 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primaryColor">#17ABE7</color>
     <color name="secondaryColor">#086CBC</color>
+    <color name="tertiaryColor">#D5FFFA</color>
+    <color name="background">#F3FFFE</color>
+
+    <color name="planCard">#B2CFDD</color>
     <!--    <color name="secondaryColor">#B51919</color>-->
 </resources>

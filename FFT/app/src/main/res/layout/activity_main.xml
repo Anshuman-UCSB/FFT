@@ -6,36 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
-
+        android:orientation="vertical">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:elevation="4dp"
             android:layout_width="match_parent"
             android:background="@color/primaryColor"
             android:layout_height="?attr/actionBarSize"/>
-        <LinearLayout
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="@+id/toolbar"
-            android:orientation="vertical"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/greeter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <Button
-                android:id="@+id/logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/logout" />
-        </LinearLayout>
-    </RelativeLayout>
+            android:layout_height="match_parent"/>
+    </LinearLayout>
     <com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
         android:id="@+id/slider"
         android:layout_width="wrap_content"

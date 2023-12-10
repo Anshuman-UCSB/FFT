@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mikepenz.materialdrawer.holder.ImageHolder;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "Entered OnCreate");
         setContentView(R.layout.activity_main);
 
         auth = FirebaseAuth.getInstance();
@@ -39,19 +42,23 @@ public class MainActivity extends AppCompatActivity {
             goToLogin();
         }
 
-        Button button = findViewById(R.id.logout);
-        TextView greeter = findViewById(R.id.greeter);
-        greeter.setText(user.getDisplayName());
+        if(savedInstanceState == null){
+            setFragment(HomeFragment.class);
+        }
 
+//        Button button = findViewById(R.id.logout);
+//        TextView greeter = findViewById(R.id.greeter);
+//        greeter.setText(user.getDisplayName());
+//
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         setupDrawer(toolbar);
 
-        button.setOnClickListener(v->{
-            auth.signOut();
-            goToLogin();
-        });
+//        button.setOnClickListener(v->{
+//            auth.signOut();
+//            goToLogin();
+//        });
     }
 
     private void setupDrawer(Toolbar toolbar) {
@@ -68,16 +75,17 @@ public class MainActivity extends AppCompatActivity {
 
         MaterialDrawerSliderView slider = findViewById(R.id.slider);
         slider.getItemAdapter().add(
-                makeItem("Home", R.drawable.home, 1, true),
+                makeItem("Home", R.drawable.home, 1, true, true),
                 makeSection("ML Coaching", 102, true),
-                makeItem("Bench", R.drawable.exercise_24px, 2, false),
-                makeItem("Squat", R.drawable.exercise_24px, 3, false),
-                makeItem("Deadlift", R.drawable.exercise_24px, 4, false)
+                makeItem("Bench", R.drawable.exercise_24px, 2, false, true),
+                makeItem("Squat", R.drawable.exercise_24px, 3, false, true),
+                makeItem("Deadlift", R.drawable.exercise_24px, 4, false, true)
         );
 
         slider.getFooterAdapter().add(
                 new DividerDrawerItem(),
-                makeItem("Settings", R.drawable.settings_24px, 9, true)
+                makeItem("Settings", R.drawable.settings_24px, 11, true, true),
+                makeItem("Logout", R.drawable.logout_24px, 12, true, false)
         );
         slider.setOnDrawerItemClickListener((v,di,p) ->{
             Log.i(TAG, "Item clicked "+di+" at pos "+p);
@@ -88,7 +96,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void processClick(int pos){
+        switch(pos){
+            case 0: // home
+                setFragment(HomeFragment.class);
+                break;
+            case 7: // logout
+                new MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle("Logout")
+                        .setIcon(R.drawable.logout_24px)
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("Logout", (d,w)->{
+                            Log.i(TAG, "Logging out");
+                            auth.signOut();
+                            goToLogin();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+                break;
+        }
+    }
 
+    private void setFragment(Class<?> frag) {
+        Bundle bundle = new Bundle();
+        String firstName = user.getDisplayName().split("\\W")[0];
+        bundle.putString("name", firstName);
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fragment_container_view, (Class<? extends Fragment>) frag, bundle)
+                .commit();
     }
 
     private SectionDrawerItem makeSection(String name, long id, boolean divider) {
@@ -99,9 +134,10 @@ public class MainActivity extends AppCompatActivity {
         return coaching;
     }
 
-    private AbstractBadgeableDrawerItem<?> makeItem(String name, Integer icon, long id, boolean primary){
+    private AbstractBadgeableDrawerItem<?> makeItem(String name, Integer icon, long id, boolean primary, boolean selectable){
         AbstractBadgeableDrawerItem<?> n = primary?(new PrimaryDrawerItem()):(new SecondaryDrawerItem());
         n.setName(new StringHolder(name));
+        n.setSelectable(selectable);
         if(icon!=null)
             n.setIcon(new ImageHolder(icon));
         n.setIdentifier(id);
