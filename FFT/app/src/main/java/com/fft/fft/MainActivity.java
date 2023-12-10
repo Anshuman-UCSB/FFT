@@ -119,7 +119,9 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Class<?> frag) {
         Bundle bundle = new Bundle();
         String firstName = user.getDisplayName().split("\\W")[0];
+        String uid = user.getUid();
         bundle.putString("name", firstName);
+        bundle.putString("uid", uid);
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .add(R.id.fragment_container_view, (Class<? extends Fragment>) frag, bundle)

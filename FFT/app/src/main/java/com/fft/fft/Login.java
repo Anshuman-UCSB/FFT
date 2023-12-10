@@ -28,6 +28,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
@@ -104,12 +106,23 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             FirebaseUser user = auth.getCurrentUser();
-                            HashMap<String, Object> map = new HashMap<>();
-                            map.put("id", user.getUid());
-                            map.put("name", user.getDisplayName());
-                            map.put("profile", user.getPhotoUrl().toString());
 
-                            database.getReference().child("users").child(user.getUid()).setValue(map);
+                            DatabaseReference ref = database.getReference().child("users").child(user.getUid());
+                            ref.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.e(TAG, "Error getting data", task.getException());
+                                    }
+                                    else {
+                                        if(task.getResult().getValue() == null){
+                                            Log.i(TAG, "Initializing new user");
+                                            ref.setValue(new User(user));
+                                        }
+                                    }
+                                }
+                            });
+//                                    .setValue(new User(user));
                             Intent intent = new Intent(Login.this, MainActivity.class);
                             pbar.setVisibility(View.GONE);
                             startActivity(intent);

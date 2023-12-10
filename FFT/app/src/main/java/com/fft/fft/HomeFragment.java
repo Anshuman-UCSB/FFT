@@ -1,5 +1,6 @@
 package com.fft.fft;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
     private final String TAG = "FFT_HomeFragment";
-    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
     private TextView numWorkouts;
 
@@ -38,18 +40,21 @@ public class HomeFragment extends Fragment {
 
         TextView greeter = view.findViewById(R.id.greeter);
         greeter.setText(String.format("Welcome %s!", requireArguments().getString("name")));
-
+        String uid = requireArguments().getString("uid");
         numWorkouts = view.findViewById(R.id.numWorkout);
-        DatabaseReference myRef = db.getReference("numWorkouts");
+        DatabaseReference myRef = db.child("users").child(uid);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Integer value = snapshot.getValue(Integer.class);
-                Log.i(TAG, "Value is: "+value);
-                if(value == null){
-                    myRef.setValue(0);
+                User user = snapshot.getValue(User.class);
+                if(user == null){
+                    Log.e(TAG, "LOGGING OUT");
+                    FirebaseAuth.getInstance().signOut();
+                }else {
+                    Log.i(TAG, "user is: " + user);
+                    Log.i(TAG, "Value is: " + user.numWorkouts);
+                    numWorkouts.setText(String.format("Workout #%d", user.numWorkouts));
                 }
-                numWorkouts.setText(String.format("Workout #%d", value));
             }
 
             @Override
