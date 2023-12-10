@@ -1,18 +1,25 @@
 package com.fft.fft;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.mikepenz.materialdrawer.holder.StringHolder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "FFT_main";
     private FirebaseAuth auth;
     private Button button;
     private TextView greeter;
@@ -37,12 +44,41 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupDrawer(toolbar);
+
 
         button.setOnClickListener(v->{
             auth.signOut();
             goToLogin();
         });
     }
+
+    private void setupDrawer(Toolbar toolbar) {
+        DrawerLayout drawerLayout = findViewById(R.id.root);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+        );
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem();
+        item1.setName(new StringHolder("Home"));
+        item1.setIdentifier(1);
+
+        MaterialDrawerSliderView slider = findViewById(R.id.slider);
+        slider.getItemAdapter().add(
+                item1
+        );
+        slider.setOnDrawerItemClickListener((v,di,p) ->{
+            Log.i(TAG, "Item clicked "+di+" at pos "+p);
+            return false;
+        });
+    }
+
     private void goToLogin(){
         Intent intent = new Intent(getApplication(), Login.class);
         startActivity(intent);
