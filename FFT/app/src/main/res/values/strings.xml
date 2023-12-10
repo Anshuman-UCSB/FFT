@@ -10,6 +10,6 @@
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Closed</string>
     <string name="drawer_item_home">home</string>
-    <string name="placeholder">PLACEHOLDER</string>
+    <string name="placeholder">loading</string>
     <string name="plan">Plan</string>
 </resources>
