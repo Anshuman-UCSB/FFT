@@ -44,4 +44,5 @@ dependencies {
 
     // drawer
     implementation "com.mikepenz:materialdrawer:9.0.1"
+    implementation "com.mikepenz:materialdrawer-iconics:9.0.1"
 }

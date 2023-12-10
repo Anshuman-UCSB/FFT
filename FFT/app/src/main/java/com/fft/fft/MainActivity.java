@@ -13,9 +13,15 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.mikepenz.materialdrawer.holder.ImageHolder;
 import com.mikepenz.materialdrawer.holder.StringHolder;
+import com.mikepenz.materialdrawer.model.AbstractBadgeableDrawerItem;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         setupDrawer(toolbar);
 
-
         button.setOnClickListener(v->{
             auth.signOut();
             goToLogin();
@@ -65,18 +70,39 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem();
-        item1.setName(new StringHolder("Home"));
-        item1.setIdentifier(1);
-
         MaterialDrawerSliderView slider = findViewById(R.id.slider);
         slider.getItemAdapter().add(
-                item1
+                makeItem("Home", R.drawable.home, 1, true),
+                makeSection("ML Coaching", 101),
+                makeItem("Bench", R.drawable.home, 2, false),
+                makeItem("Squat", R.drawable.home, 3, false),
+                makeItem("Deadlift", R.drawable.home, 4, false)
+        );
+
+        slider.getFooterAdapter().add(
+                new DividerDrawerItem(),
+                makeItem("Settings", R.drawable.settings_24px, 9, true)
         );
         slider.setOnDrawerItemClickListener((v,di,p) ->{
             Log.i(TAG, "Item clicked "+di+" at pos "+p);
             return false;
         });
+    }
+
+    private SectionDrawerItem makeSection(String name, long id) {
+        SectionDrawerItem coaching = new SectionDrawerItem();
+        coaching.setName(new StringHolder(name));
+//        coaching.setDivider(true);
+        coaching.setIdentifier(id);
+        return coaching;
+    }
+
+    private AbstractBadgeableDrawerItem makeItem(String name, int icon, long id, boolean primary){
+        AbstractBadgeableDrawerItem<?> n = primary?(new PrimaryDrawerItem()):(new SecondaryDrawerItem());
+        n.setName(new StringHolder(name));
+        n.setIcon(new ImageHolder(icon));
+        n.setIdentifier(id);
+        return n;
     }
 
     private void goToLogin(){
