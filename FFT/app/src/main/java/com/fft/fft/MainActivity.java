@@ -46,19 +46,10 @@ public class MainActivity extends AppCompatActivity {
             setFragment(HomeFragment.class);
         }
 
-//        Button button = findViewById(R.id.logout);
-//        TextView greeter = findViewById(R.id.greeter);
-//        greeter.setText(user.getDisplayName());
-//
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         setupDrawer(toolbar);
-
-//        button.setOnClickListener(v->{
-//            auth.signOut();
-//            goToLogin();
-//        });
     }
 
     private void setupDrawer(Toolbar toolbar) {
@@ -100,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
             case 0: // home
                 setFragment(HomeFragment.class);
                 break;
+            case 2: // Bench
+                setFragment(PoseFragment.class);
+                break;
             case 7: // logout
                 new MaterialAlertDialogBuilder(MainActivity.this)
                         .setTitle("Logout")
@@ -117,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setFragment(Class<?> frag) {
+        Log.i(TAG, "changing fragment to "+frag);
         Bundle bundle = new Bundle();
         String firstName = user.getDisplayName().split("\\W")[0];
         String uid = user.getUid();
@@ -124,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         bundle.putString("uid", uid);
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.fragment_container_view, (Class<? extends Fragment>) frag, bundle)
+                .replace(R.id.fragment_container_view, (Class<? extends Fragment>) frag, bundle)
                 .commit();
     }
 

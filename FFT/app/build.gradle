@@ -48,4 +48,11 @@ dependencies {
 
     // fragments
     implementation "androidx.fragment:fragment:1.6.2"
+
+    //MlKit pose detection
+    implementation 'com.google.mlkit:pose-detection:18.0.0-beta3'
+    implementation 'com.google.mlkit:pose-detection-accurate:18.0.0-beta3'
+
+    // ExoPlayer
+    implementation "com.google.android.exoplayer:exoplayer:2.14.2"
 }
