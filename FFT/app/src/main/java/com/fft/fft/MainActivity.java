@@ -90,7 +90,13 @@ public class MainActivity extends AppCompatActivity {
                 setFragment(HomeFragment.class);
                 break;
             case 2: // Bench
-                setFragment(PoseFragment.class);
+                setFragment(PoseFragment.class, "bench");
+                break;
+            case 3: // Squat
+                setFragment(PoseFragment.class, "squat");
+                break;
+            case 4: // Squat
+                setFragment(PoseFragment.class, "deadlift");
                 break;
             case 6: // Settings
                 setFragment(SettingsFragment.class);
@@ -109,6 +115,20 @@ public class MainActivity extends AppCompatActivity {
                         .show();
                 break;
         }
+    }
+
+    private void setFragment(Class<?> frag, String exercise) {
+        Log.i(TAG, "changing fragment to "+frag);
+        Bundle bundle = new Bundle();
+        String firstName = user.getDisplayName().split("\\W")[0];
+        String uid = user.getUid();
+        bundle.putString("name", firstName);
+        bundle.putString("uid", uid);
+        bundle.putString("exercise", exercise);
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container_view, (Class<? extends Fragment>) frag, bundle)
+                .commit();
     }
 
     private void setFragment(Class<?> frag) {

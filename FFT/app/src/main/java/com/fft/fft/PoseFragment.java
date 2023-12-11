@@ -21,6 +21,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.fft.fft.coaches.BenchCoach;
+import com.fft.fft.coaches.Coach;
 import com.fft.fft.gles.GraphicOverlay;
 import com.fft.fft.R;
 import com.fft.fft.poseDetection.CustomPoseDetector;
@@ -43,6 +45,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
     private int frameWidth, frameHeight;
 
     private CustomPoseDetector imageProcessor;
+    private Coach coach;
 
     public PoseFragment(){
         super(R.layout.pose_fragment);
@@ -52,8 +55,16 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         boolean accurate = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("accurate", false);
-        Log.i(TAG, "accurate preference: "+accurate);
+
+        Log.d(TAG, "accurate preference: "+accurate);
         imageProcessor = new CustomPoseDetector(accurate);
+
+        String exercise = requireArguments().getString("exercise");
+        switch(exercise){
+            case "bench":
+                coach = new BenchCoach();
+                break;
+        }
 
         player = new SimpleExoPlayer.Builder(getContext()).build();
         player.setVolume(0);
@@ -145,6 +156,8 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
                     false
             ));
             graphicOverlay.postInvalidate();
+            coach.process(pose);
+
         });
     }
 }

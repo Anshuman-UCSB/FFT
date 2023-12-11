@@ -23,6 +23,7 @@
         app:layout_constraintBottom_toTopOf="@id/control"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/planCard"
         app:layout_constraintTop_toBottomOf="@id/player_view">
 
         <LinearLayout
@@ -38,6 +39,13 @@
                 android:textStyle="bold"
                 android:gravity="center_horizontal"
                 android:text="@string/notes"
+                />
+
+            <TextView
+                android:id="@+id/Notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBody1"
                 />
         </LinearLayout>
     </ScrollView>
@@ -57,13 +65,13 @@
             android:layout_weight="1"
             android:text="Choose Video" />
 
-        <TextView
-            android:id="@+id/statusText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="10dp"
-            android:text="TextView" />
+<!--        <TextView-->
+<!--            android:id="@+id/statusText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:text="TextView" />-->
     </LinearLayout>
 
 
