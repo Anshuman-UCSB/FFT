@@ -24,6 +24,7 @@ import androidx.preference.PreferenceManager;
 
 import com.fft.fft.coaches.BenchCoach;
 import com.fft.fft.coaches.Coach;
+import com.fft.fft.coaches.DeadliftCoach;
 import com.fft.fft.coaches.SquatCoach;
 import com.fft.fft.gles.GraphicOverlay;
 import com.fft.fft.R;
@@ -69,6 +70,9 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
                 break;
             case "squat":
                 coach = new SquatCoach(getContext());
+                break;
+            case "deadlift":
+                coach = new DeadliftCoach(getContext());
                 break;
         }
         notes = view.findViewById(R.id.notes);
