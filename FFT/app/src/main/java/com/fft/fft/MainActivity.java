@@ -92,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
             case 2: // Bench
                 setFragment(PoseFragment.class);
                 break;
+            case 6: // Settings
+                setFragment(SettingsFragment.class);
+                break;
             case 7: // logout
                 new MaterialAlertDialogBuilder(MainActivity.this)
                         .setTitle("Logout")

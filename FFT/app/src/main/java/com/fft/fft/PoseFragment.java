@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.fft.fft.gles.GraphicOverlay;
 import com.fft.fft.R;
@@ -50,7 +51,9 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        imageProcessor = new CustomPoseDetector();
+        boolean accurate = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("accurate", false);
+        Log.i(TAG, "accurate preference: "+accurate);
+        imageProcessor = new CustomPoseDetector(accurate);
 
         player = new SimpleExoPlayer.Builder(getContext()).build();
         player.setVolume(0);
@@ -73,6 +76,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
             }
         });
 
+        // TODO: Add upload button into appbar
         view.findViewById(R.id.selectVidBtn).setOnClickListener( v -> {
             startSelectVideo();
         });

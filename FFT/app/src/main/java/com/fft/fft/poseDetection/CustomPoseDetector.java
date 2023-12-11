@@ -14,10 +14,15 @@ import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions;
 
 public class CustomPoseDetector {
     private static final String TAG = "FFT_CustomPoseDetector";
-    private final boolean ACCURATE = true;
+    private boolean accurate;
     private PoseDetector poseDetector;
-    public CustomPoseDetector(){
-        if(ACCURATE) {
+    public CustomPoseDetector(boolean acc){
+        accurate = acc;
+        setupDetector(accurate);
+    }
+
+    private void setupDetector(boolean accurate) {
+        if(accurate) {
             AccuratePoseDetectorOptions options =
                     new AccuratePoseDetectorOptions.Builder()
                             .setDetectorMode(AccuratePoseDetectorOptions.STREAM_MODE)

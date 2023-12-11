@@ -55,4 +55,7 @@ dependencies {
 
     // ExoPlayer
     implementation "com.google.android.exoplayer:exoplayer:2.14.2"
+
+    // Settings
+    implementation "androidx.preference:preference-ktx:1.2.1"
 }
