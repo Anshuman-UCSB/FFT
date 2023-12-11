@@ -24,6 +24,7 @@ import androidx.preference.PreferenceManager;
 
 import com.fft.fft.coaches.BenchCoach;
 import com.fft.fft.coaches.Coach;
+import com.fft.fft.coaches.SquatCoach;
 import com.fft.fft.gles.GraphicOverlay;
 import com.fft.fft.R;
 import com.fft.fft.poseDetection.CustomPoseDetector;
@@ -65,6 +66,9 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
         switch(exercise){
             case "bench":
                 coach = new BenchCoach();
+                break;
+            case "squat":
+                coach = new SquatCoach();
                 break;
         }
         notes = view.findViewById(R.id.notes);

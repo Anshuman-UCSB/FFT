@@ -45,7 +45,7 @@ public class BenchCoach extends Coach{
                 note("Your elbows are tucked in too much.");
                 break;
             case 0:
-                note("Good job keeping around a 45 degree angle!");
+                note("Good job keeping around a 45° angle!");
                 break;
         }
 //        switch(state) {
@@ -89,10 +89,10 @@ public class BenchCoach extends Coach{
         float margin = shoulderWidth / 5f;
 
         float elbowToShoulderDiff = avgY(leftShoulder, rightShoulder)-avgY(leftElbow, rightElbow);
+        debug = "Ratio: "+lowestRatio+"\nelbowToShoulderDiff: "+elbowToShoulderDiff;
         if(state == State.UP){
             if(lowestDiff != 0){
                 lowestDiff = 0;
-//                debug = "Ratio: "+lowestRatio;
                 if(lowestRatio < .8){
                     elbow = 1;
                 }else if(lowestRatio > 2){
