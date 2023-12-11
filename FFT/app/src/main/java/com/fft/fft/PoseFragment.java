@@ -65,10 +65,10 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
         String exercise = requireArguments().getString("exercise");
         switch(exercise){
             case "bench":
-                coach = new BenchCoach();
+                coach = new BenchCoach(getContext());
                 break;
             case "squat":
-                coach = new SquatCoach();
+                coach = new SquatCoach(getContext());
                 break;
         }
         notes = view.findViewById(R.id.notes);

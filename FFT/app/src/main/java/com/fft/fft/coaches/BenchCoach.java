@@ -8,6 +8,7 @@ import static com.fft.fft.poseDetection.utils.dist;
 
 import static java.lang.Math.abs;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.mlkit.vision.pose.Pose;
@@ -15,7 +16,6 @@ import com.google.mlkit.vision.pose.PoseLandmark;
 
 public class BenchCoach extends Coach{
     public final String TAG = "FFT_BenchCoach";
-    private String debug;
 
     private int imbalanced;
     private int elbow;
@@ -30,7 +30,8 @@ public class BenchCoach extends Coach{
     }
 
     private State state;
-    public BenchCoach(){
+    public BenchCoach(Context ctx){
+        super(ctx);
         Log.i(TAG, "Initialized bench coach");
     }
     @Override
@@ -59,10 +60,7 @@ public class BenchCoach extends Coach{
         if(imbalanced>0){
             note("Your hands were offset, try to make sure they're staying even");
         }
-        if(debug != null){
-            str.append(debug);
-        }
-        return str.toString();
+        return super.getAdvice();
     }
 
     @Override
@@ -89,7 +87,7 @@ public class BenchCoach extends Coach{
         float margin = shoulderWidth / 5f;
 
         float elbowToShoulderDiff = avgY(leftShoulder, rightShoulder)-avgY(leftElbow, rightElbow);
-        debug = "Ratio: "+lowestRatio+"\nelbowToShoulderDiff: "+elbowToShoulderDiff;
+        debug = "Ratio: "+lowestRatio+"\nelbowToShoulderDiff: "+elbowToShoulderDiff+"\nLowestDiff: "+lowestDiff+"\nElbow Flag: "+elbow;
         if(state == State.UP){
             if(lowestDiff != 0){
                 lowestDiff = 0;

@@ -6,6 +6,10 @@
         app:summary="Use the accurate pose detector, at cost of speed"
         app:title="Accurate pose detector"/>
 
+    <SwitchPreferenceCompat
+        app:key="debug"
+        app:summary="Display numerical values during ML coaching"
+        app:title="Display Values"/>
 <!--    <Preference-->
 <!--        app:key="feedback"-->
 <!--        app:title="Send feedback"-->

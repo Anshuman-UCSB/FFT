@@ -6,6 +6,7 @@ import static com.fft.fft.poseDetection.utils.diffY;
 import static com.fft.fft.poseDetection.utils.dist;
 import static java.lang.Math.abs;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.mlkit.vision.pose.Pose;
@@ -13,7 +14,6 @@ import com.google.mlkit.vision.pose.PoseLandmark;
 
 public class SquatCoach extends Coach{
     public final String TAG = "FFT_SquatCoach";
-    private String debug;
 
     private int imbalanced;
     private int notEnoughROM;
@@ -29,7 +29,8 @@ public class SquatCoach extends Coach{
     }
 
     private State state;
-    public SquatCoach(){
+    public SquatCoach(Context ctx){
+        super(ctx);
         Log.i(TAG, "Initialized squat coach");
     }
     @Override
@@ -49,10 +50,7 @@ public class SquatCoach extends Coach{
         if(imbalanced>0){
             note("Your hands were offset, try to make sure they're staying even");
         }
-        if(debug != null){
-            str.append(debug);
-        }
-        return str.toString();
+        return super.getAdvice();
     }
 
     @Override
