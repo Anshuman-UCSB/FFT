@@ -29,6 +29,7 @@ import com.fft.fft.R;
 import com.fft.fft.poseDetection.CustomPoseDetector;
 import com.fft.fft.poseDetection.PoseGraphic;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 
@@ -70,6 +71,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
 
         player = new SimpleExoPlayer.Builder(getContext()).build();
         player.setVolume(0);
+        player.setRepeatMode(Player.REPEAT_MODE_OFF);
 
         playerView = view.findViewById(R.id.player_view);
         playerView.setPlayer(player);
@@ -84,6 +86,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
             if (uri != null) {
                 Log.d(TAG, "Selected URI: " + uri);
                 setupPlayer(uri);
+                coach.reset();
             } else {
                 Log.d(TAG,"No media selected");
             }

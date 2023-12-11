@@ -17,7 +17,7 @@ public class BenchCoach extends Coach{
     public final String TAG = "FFT_BenchCoach";
     private String debug;
 
-    private boolean imbalanced;
+    private int imbalanced;
     private int elbow;
     private int reps;
 
@@ -36,7 +36,7 @@ public class BenchCoach extends Coach{
     @Override
     public String getAdvice() {
         str.setLength(0);
-        note("Currently on rep "+reps);
+        note("Currently on rep "+reps+" and in state "+(state==State.UP?"UP":"DOWN"));
         switch(elbow) {
             case 1:
                 note("Your elbows are too flared out.");
@@ -44,16 +44,20 @@ public class BenchCoach extends Coach{
             case -1:
                 note("Your elbows are tucked in too much.");
                 break;
-            default:
-                note("Godo job keeping around a 45 degree angle!");
+            case 0:
+                note("Good job keeping around a 45 degree angle!");
+                break;
         }
-        switch(state) {
-            case UP:
-                note("Currently in state UP");
-                break;
-            case DOWN:
-                note("Currently in state DOWN");
-                break;
+//        switch(state) {
+//            case UP:
+//                note("Currently in state UP");
+//                break;
+//            case DOWN:
+//                note("Currently in state DOWN");
+//                break;
+//        }
+        if(imbalanced>0){
+            note("Your hands were offset, try to make sure they're staying even");
         }
         if(debug != null){
             str.append(debug);
@@ -63,12 +67,12 @@ public class BenchCoach extends Coach{
 
     @Override
     public void reset() {
-        elbow = 0;
+        elbow = -2; // do not show text
         state = State.UP;
         str.setLength(0);
         reps = 0;
         lowestDiff = 0;
-        imbalanced = false;
+        imbalanced = 0;
     }
 
     @Override
@@ -89,14 +93,15 @@ public class BenchCoach extends Coach{
             if(lowestDiff != 0){
                 lowestDiff = 0;
 //                debug = "Ratio: "+lowestRatio;
-                if(lowestRatio < 1){
+                if(lowestRatio < .8){
                     elbow = 1;
                 }else if(lowestRatio > 2){
                     elbow = -1;
                 }else{
                     elbow = 0;
                 }
-                imbalanced = false; // reset flag
+                if(imbalanced > 0)
+                    imbalanced--; // reset flag
             }
             if(elbowToShoulderDiff < margin){
                 state = State.DOWN;
@@ -105,6 +110,9 @@ public class BenchCoach extends Coach{
             if (elbowToShoulderDiff < lowestDiff){
                 lowestDiff = elbowToShoulderDiff;
                 lowestRatio = abs(diffY(leftShoulder, leftElbow)/diffX(leftShoulder, leftElbow));
+            }
+            if(diffY(leftWrist, rightWrist) > margin){
+                imbalanced = 3;
             }
             if(elbowToShoulderDiff > margin){
                 state = State.UP;
