@@ -1,6 +1,6 @@
 package com.fft.fft;
 
-import static com.fft.fft.utils.getSizeForDesiredSize;
+import static com.fft.fft.poseDetection.utils.getSizeForDesiredSize;
 
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
@@ -20,6 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.fft.fft.gles.GraphicOverlay;
+import com.fft.fft.R;
+import com.fft.fft.poseDetection.CustomPoseDetector;
+import com.fft.fft.poseDetection.PoseGraphic;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;

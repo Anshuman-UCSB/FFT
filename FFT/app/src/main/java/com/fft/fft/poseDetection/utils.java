@@ -1,4 +1,4 @@
-package com.fft.fft;
+package com.fft.fft.poseDetection;
 
 import android.util.Size;
 

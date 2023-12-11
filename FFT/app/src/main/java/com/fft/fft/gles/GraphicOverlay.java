@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.fft.fft;
+package com.fft.fft.gles;
 
 import android.content.Context;
 import android.graphics.Canvas;

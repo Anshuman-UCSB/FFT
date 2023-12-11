@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.fft.fft;
+package com.fft.fft.poseDetection;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -23,6 +23,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.fft.fft.gles.GraphicOverlay;
 import com.google.common.primitives.Ints;
 import com.google.mlkit.vision.common.PointF3D;
 import com.google.mlkit.vision.pose.Pose;
@@ -48,7 +49,7 @@ public class PoseGraphic extends GraphicOverlay.Graphic {
   private final Paint rightPaint;
   private final Paint whitePaint;
 
-  PoseGraphic(
+  public PoseGraphic(
       GraphicOverlay overlay,
       Pose pose,
       boolean visualizeZ,
