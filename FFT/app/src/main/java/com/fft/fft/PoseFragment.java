@@ -12,6 +12,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -46,7 +47,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
 
     private CustomPoseDetector imageProcessor;
     private Coach coach;
-
+    private TextView notes;
     public PoseFragment(){
         super(R.layout.pose_fragment);
     }
@@ -65,6 +66,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
                 coach = new BenchCoach();
                 break;
         }
+        notes = view.findViewById(R.id.notes);
 
         player = new SimpleExoPlayer.Builder(getContext()).build();
         player.setVolume(0);
@@ -157,7 +159,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
             ));
             graphicOverlay.postInvalidate();
             coach.process(pose);
-
+            notes.setText(coach.getAdvice());
         });
     }
 }
