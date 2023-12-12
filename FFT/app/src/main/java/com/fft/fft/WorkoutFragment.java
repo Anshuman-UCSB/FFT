@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.fft.fft.workouts.ActiveWorkout;
+import com.fft.fft.workouts.Exercise;
+import com.fft.fft.workouts.ExerciseView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +36,8 @@ public class WorkoutFragment extends Fragment {
     private ActiveWorkout workout;
 
     TextView workoutName, elapsedTime, workoutNumber;
+    ScrollView scrollView;
+    LinearLayout exerciseContainer;
 
     private User user;
 
@@ -57,6 +63,10 @@ public class WorkoutFragment extends Fragment {
         workoutName = view.findViewById(R.id.workoutName);
         workoutNumber = view.findViewById(R.id.workoutNumber);
         elapsedTime = view.findViewById(R.id.elapsedTime);
+
+        scrollView = view.findViewById(R.id.scrollView);
+        exerciseContainer = view.findViewById(R.id.exerciseContainer);
+
         view.findViewById(R.id.finishBtn).setOnClickListener(v->{
             workoutFinished();
         });
@@ -115,6 +125,13 @@ public class WorkoutFragment extends Fragment {
     private void processUser() {
         Log.i(TAG, "Currently processing user " + user.name);
         workout = user.workout;
+        if(workout!=null){
+            Log.i(TAG, "Updating exercise weights");
+            if(workout.updateExerciseWeights(user)){
+                pushUser();
+                return;
+            }
+        }
         if(user.workoutActive && workout == null){
             Log.e(TAG, "workout disappeared");
             user.workoutActive = false;
@@ -123,6 +140,9 @@ public class WorkoutFragment extends Fragment {
             workoutName.setText(String.format("%s %s", getString(R.string.current_workout), workout.type));
             workoutNumber.setText(String.format("%s%d", getString(R.string.workout_number), user.numWorkouts+1));
             handler.post(updateTime);
+            for(Exercise e: user.workout.exercises){
+                exerciseContainer.addView(new ExerciseView(getContext(), e));
+            }
             updatedWorkoutUI = true;
         }
         if(!user.workoutActive) {

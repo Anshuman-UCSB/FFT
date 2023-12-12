@@ -11,5 +11,9 @@ public class PushWorkout extends ActiveWorkout {
     public PushWorkout(){
         super();
         Log.d(TAG, "PushWorkout constructor called");
+        addExercise("Bench Press", "Barbell",3,8);
+        addExercise("Incline Press", "Barbell",3,8);
+        addExercise("Shoulder Press", "Barbell or Dumbbells",3,8);
+        addExercise("Triceps Pushdowns", "Cable Machine",3,15);
     }
 }

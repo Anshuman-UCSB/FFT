@@ -10,12 +10,12 @@ public class Exercise {
     public int setsDone;
     public double weight;
     public Exercise(){}
-    public Exercise(String name, String desc, int sets, int reps, int setsDone, double weight) {
+    public Exercise(String name, String desc, int sets, int reps, double weight) {
         this.name = name;
         this.desc = desc;
         this.sets = sets;
         this.reps = reps;
-        this.setsDone = setsDone;
+        this.setsDone = 0;
         this.weight = weight;
     }
 }

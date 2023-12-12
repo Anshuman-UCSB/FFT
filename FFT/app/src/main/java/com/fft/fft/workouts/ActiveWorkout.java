@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.fft.fft.User;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @IgnoreExtraProperties
@@ -17,17 +18,23 @@ public class ActiveWorkout {
 
     public ActiveWorkout(){
         startTime = System.currentTimeMillis();
+        exercises = new ArrayList<>();
         Log.d(TAG, "ActiveWorkout constructor called");
     }
 
-    public void addExercise(String name, String desc, int sets, int reps, int setsDone){
-        exercises.add(new Exercise(name, desc, sets, reps, setsDone, 0));
+    public void addExercise(String name, String desc, int sets, int reps){
+        exercises.add(new Exercise(name, desc, sets, reps,-1));
     }
 
-    public void updateExerciseWeights(User user){
+    public boolean updateExerciseWeights(User user){
+        boolean changed = false;
         for(Exercise e: exercises){
-            e.weight = user.nameToWeight.getOrDefault(e.name, 0d);
+            if(e.weight == -1){
+                e.weight = user.nameToWeight.getOrDefault(e.name, 0d);
+                changed = true;
+            }
         }
+        return changed;
     }
 
     public String getElapsedTime(){

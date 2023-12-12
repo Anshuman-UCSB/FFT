@@ -29,6 +29,7 @@ public class User {
         workout = null;
         workoutActive = false;
         nameToWeight = new HashMap<>();
+        setWeight("null",0);
     }
 
     public void setWeight(String name, double weight){
