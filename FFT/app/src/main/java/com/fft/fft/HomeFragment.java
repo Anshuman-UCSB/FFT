@@ -38,6 +38,9 @@ public class HomeFragment extends Fragment {
         MaterialCardView planCard = view.findViewById(R.id.card_plan);
         planCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.planCard));
 
+        MaterialCardView coachCard = view.findViewById(R.id.card_coach);
+        coachCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.secondaryColor));
+
         TextView greeter = view.findViewById(R.id.greeter);
         greeter.setText(String.format("Welcome %s!", requireArguments().getString("name")));
         String uid = requireArguments().getString("uid");
