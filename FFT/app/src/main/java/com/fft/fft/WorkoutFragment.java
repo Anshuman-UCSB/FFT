@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.fft.fft.workouts.ActiveWorkout;
 import com.fft.fft.workouts.Exercise;
-import com.fft.fft.workouts.ExerciseView;
+import com.fft.fft.Views.ExerciseView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
