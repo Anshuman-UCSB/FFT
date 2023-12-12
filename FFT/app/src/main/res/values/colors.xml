@@ -8,5 +8,6 @@
     <color name="background">#F3FFFE</color>
 
     <color name="planCard">#B2CFDD</color>
+    <color name="statCard">#55D3C4</color>
     <!--    <color name="secondaryColor">#B51919</color>-->
 </resources>

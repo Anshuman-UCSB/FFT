@@ -48,6 +48,9 @@ public class HomeFragment extends Fragment {
         MaterialCardView coachCard = view.findViewById(R.id.card_coach);
         coachCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.secondaryColor));
 
+        MaterialCardView statCard = view.findViewById(R.id.card_stats);
+        statCard.setVisibility(View.GONE);
+
         TextView greeter = view.findViewById(R.id.greeter);
         greeter.setText(String.format("Welcome %s!", requireArguments().getString("name")));
         String uid = requireArguments().getString("uid");
@@ -55,6 +58,7 @@ public class HomeFragment extends Fragment {
         TextView numWorkouts = view.findViewById(R.id.numWorkout);
         TextView currentWorkout = view.findViewById(R.id.CurrentWorkout);
 
+        TextView stats = view.findViewById(R.id.stats);
         myRef = db.child("users").child(uid);
         listener = new ValueEventListener() {
             @Override
@@ -75,6 +79,17 @@ public class HomeFragment extends Fragment {
                     if(user.workoutActive){
                         startWorkout.setText("Continue workout");
                     }
+                    StringBuilder text = new StringBuilder();
+                    text.append("You've completed ").append(user.numWorkouts).append(" workout").append(user.numWorkouts!=1?"s":"").append("!");
+                    text.append("\nIn all of those, you lifted a total of ").append(user.totalWeight).append("lbs!");
+
+                    long s = user.totalTime;
+                    String totalTime = String.format("%d:%02d:%02d", s / 3600, (s % 3600) / 60, (s % 60));
+                    text.append("\nThis took ").append(totalTime).append(", now that's dedication. Keep it up!");
+
+                    stats.setText(text.toString());
+                    if(user.numWorkouts>0)
+                        statCard.setVisibility(View.VISIBLE);
                 }
             }
 

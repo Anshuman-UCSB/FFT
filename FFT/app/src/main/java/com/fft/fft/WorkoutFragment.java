@@ -18,6 +18,7 @@ import com.fft.fft.Views.ExerciseEventListener;
 import com.fft.fft.workouts.ActiveWorkout;
 import com.fft.fft.workouts.Exercise;
 import com.fft.fft.Views.ExerciseView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +29,7 @@ import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WorkoutFragment extends Fragment implements ExerciseEventListener {
     private static final String TAG = "FFT_WorkoutFragment";
@@ -109,6 +111,22 @@ public class WorkoutFragment extends Fragment implements ExerciseEventListener {
 
     public void workoutFinished(){
         Log.i(TAG, "Workout finished");
+//        AtomicBoolean ignore = new AtomicBoolean(false);
+//        for(Exercise e: user.workout.exercises){
+//            if(e.setsDone < e.sets){
+//                new MaterialAlertDialogBuilder(getContext())
+//                        .setTitle("Finish workout?")
+//                        .setMessage("You didn't finish all of your sets, are you sure you want to finish this workout?")
+//                        .setNegativeButton("Continue",(a,b)->{
+//                            ignore.set(true);})
+//                        .setPositiveButton("Finish", null)
+//                        .show();
+//            }
+//            if(ignore.get()) {
+//                Log.i(TAG, "Abort finish");
+//                return;
+//            }
+//        }
         user.finishWorkout();
         stopListeners();
         pushUser();

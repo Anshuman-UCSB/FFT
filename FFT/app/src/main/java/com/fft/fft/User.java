@@ -1,6 +1,7 @@
 package com.fft.fft;
 
 import com.fft.fft.workouts.ActiveWorkout;
+import com.fft.fft.workouts.Exercise;
 import com.fft.fft.workouts.LegsWorkout;
 import com.fft.fft.workouts.PullWorkout;
 import com.fft.fft.workouts.PushWorkout;
@@ -19,6 +20,8 @@ public class User {
     public ActiveWorkout workout;
     public boolean workoutActive;
     public Map<String, Double> nameToWeight;
+    public long totalWeight;
+    public long totalTime;
 
     public User(){
         workout = null;
@@ -26,6 +29,8 @@ public class User {
     public User(FirebaseUser user) {
         uid = user.getUid();
         numWorkouts = 0;
+        totalWeight = 0;
+        totalTime = 0;
         name = user.getDisplayName();
         email = user.getEmail();
         workout = null;
@@ -65,6 +70,11 @@ public class User {
         assert workoutActive: "Tried to finish workout, but workoutActive is false";
         workoutActive = false;
         numWorkouts++;
+        for(Exercise e: workout.exercises){
+            totalWeight+=e.weight*e.setsDone;
+        }
+        long elapsedMs = System.currentTimeMillis()-workout.startTime;
+        totalTime += elapsedMs/1000;
         workout = null;
     }
 }
