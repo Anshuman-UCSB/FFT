@@ -170,16 +170,11 @@ public class WorkoutFragment extends Fragment implements ExerciseEventListener {
     }
 
     @Override
-    public void onCompletedChange(String name, int completed) {
-//        for(Exercise e: user.workout.exercises){
-//            if(e.name == name){
-//                e.setsDone = completed;
-//                break;
-//            }
-//        }
+    public void exerciseUpdated(Exercise exercise) {
         updatedWorkoutUI = false;
+        user.setWeight(exercise.name, exercise.weight);
         pushUser();
-        Log.i(TAG, "Exercise "+name+" was updated to "+completed);
+        Log.i(TAG, "Exercise "+exercise.name+" was updated to "+exercise.setsDone+" with weight: "+exercise.weight);
         Log.i(TAG, "Exercises: "+user.workout.exercises);
     }
 }

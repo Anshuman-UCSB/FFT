@@ -1,15 +1,22 @@
 package com.fft.fft.Views;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fft.fft.R;
 import com.fft.fft.workouts.Exercise;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +65,29 @@ public class ExerciseView extends LinearLayout implements SetEventListener{
                 checks.set(i, true);
             setContainer.addView(sv);
         }
+
+        findViewById(R.id.exerciseCard).setOnClickListener(v->{
+            Log.i(TAG, name+" Card was clicked");
+            TextInputEditText textInput = new TextInputEditText(getContext());
+            textInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+            new MaterialAlertDialogBuilder(getContext())
+                    .setTitle("Enter weight for "+exercise.name)
+                    .setView(textInput)
+                    .setPositiveButton("Save", (d,w)->{
+                        String enteredText = textInput.getText().toString();
+                        try{
+                            int weight = Integer.parseInt(enteredText);
+                            exercise.weight = weight;
+                            if(listener != null){
+                                listener.exerciseUpdated(exercise);
+                            }
+                        } catch (NumberFormatException e){
+                            Log.e(TAG, "Invalid weight passed in: "+enteredText);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
     }
 
     public void setListener(ExerciseEventListener l){
@@ -72,7 +102,7 @@ public class ExerciseView extends LinearLayout implements SetEventListener{
             exercise.setsDone+=b?1:0;
         }
         if(listener != null){
-            listener.onCompletedChange(name, exercise.setsDone);
+            listener.exerciseUpdated(exercise);
         }
         Log.i(TAG, "Checkbox callback, "+checks+", "+exercise.name+" completed="+exercise.setsDone+ " on object "+exercise);
     }

@@ -1,5 +1,7 @@
 package com.fft.fft.Views;
 
+import com.fft.fft.workouts.Exercise;
+
 public interface ExerciseEventListener {
-    void onCompletedChange(String name, int completed);
+    void exerciseUpdated(Exercise exercise);
 }
