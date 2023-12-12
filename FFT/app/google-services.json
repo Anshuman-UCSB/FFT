@@ -1,0 +1,105 @@
+{
+  "project_info": {
+    "project_number": "959249440960",
+    "project_id": "formfocusedtrainer",
+    "storage_bucket": "formfocusedtrainer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959249440960:android:eb2f2fde07423f57404d25",
+        "android_client_info": {
+          "package_name": "com.example.fft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959249440960-eukmske52nn1ff6750t8m8fjtef0k6gk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fft",
+            "certificate_hash": "560b0207f141a872a5f88bbbaf4e55447c1684cc"
+          }
+        },
+        {
+          "client_id": "959249440960-bi1cj0a3bqsgntimh2n8jq1f0rne41bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXRnF-UVxBCq2nos6MyP3x5w0XQS1TLho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959249440960-bi1cj0a3bqsgntimh2n8jq1f0rne41bu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959249440960:android:d33c1e86bf7c0126404d25",
+        "android_client_info": {
+          "package_name": "com.example.fft_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959249440960-bi1cj0a3bqsgntimh2n8jq1f0rne41bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXRnF-UVxBCq2nos6MyP3x5w0XQS1TLho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959249440960-bi1cj0a3bqsgntimh2n8jq1f0rne41bu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959249440960:android:637cbbd8b203adaf404d25",
+        "android_client_info": {
+          "package_name": "com.fft.fft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959249440960-bi1cj0a3bqsgntimh2n8jq1f0rne41bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXRnF-UVxBCq2nos6MyP3x5w0XQS1TLho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959249440960-bi1cj0a3bqsgntimh2n8jq1f0rne41bu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
