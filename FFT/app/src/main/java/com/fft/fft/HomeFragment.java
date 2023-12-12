@@ -64,6 +64,7 @@ public class HomeFragment extends Fragment {
                     Log.i(TAG, "Value is: " + user.numWorkouts);
                     numWorkouts.setText(String.format("Workout #%d", user.numWorkouts+1));
                     currentWorkout.setText(String.format("Today is your %s day! %s",user.getDay(), getRandomEmoji()));
+                    view.findViewById(R.id.startWorkoutBtn).setVisibility(View.VISIBLE);
                 }
             }
 

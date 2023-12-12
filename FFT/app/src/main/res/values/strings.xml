@@ -18,4 +18,5 @@
     <string name="squat">Squat</string>
     <string name="deadlift">Deadlift</string>
     <string name="start_workout">Start Workout</string>
+    <string name="ml_coaching_descr">Choose from the options below to get ML assisted help on your form!</string>
 </resources>
