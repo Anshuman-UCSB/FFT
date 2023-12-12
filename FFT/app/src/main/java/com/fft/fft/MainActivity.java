@@ -65,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
         MaterialDrawerSliderView slider = findViewById(R.id.slider);
         slider.getItemAdapter().add(
                 makeItem("Home", R.drawable.home, 1, true, true),
+                makeItem("Workout", R.drawable.plan, 2, true, true),
                 makeSection("ML Coaching", 102, true),
-                makeItem("Bench", R.drawable.exercise_24px, 2, false, true),
-                makeItem("Squat", R.drawable.exercise_24px, 3, false, true),
-                makeItem("Deadlift", R.drawable.exercise_24px, 4, false, true)
+                makeItem("Bench", R.drawable.exercise_24px, 3, false, true),
+                makeItem("Squat", R.drawable.exercise_24px, 4, false, true),
+                makeItem("Deadlift", R.drawable.exercise_24px, 5, false, true)
         );
 
         slider.getFooterAdapter().add(
@@ -89,19 +90,22 @@ public class MainActivity extends AppCompatActivity {
             case 0: // home
                 setFragment(HomeFragment.class);
                 break;
-            case 2: // Bench
+            case 1: // home
+                setFragment(WorkoutFragment.class);
+                break;
+            case 3: // Bench
                 setFragment(PoseFragment.class, "bench");
                 break;
-            case 3: // Squat
+            case 4: // Squat
                 setFragment(PoseFragment.class, "squat");
                 break;
-            case 4: // Squat
+            case 5: // Squat
                 setFragment(PoseFragment.class, "deadlift");
                 break;
-            case 6: // Settings
+            case 7: // Settings
                 setFragment(SettingsFragment.class);
                 break;
-            case 7: // logout
+            case 8: // logout
                 new MaterialAlertDialogBuilder(MainActivity.this)
                         .setTitle("Logout")
                         .setIcon(R.drawable.logout_24px)

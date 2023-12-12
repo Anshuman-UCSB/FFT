@@ -75,10 +75,11 @@ public class HomeFragment extends Fragment {
         });
 
         MaterialDrawerSliderView slider = getActivity().findViewById(R.id.slider);
-        Log.i(TAG, "Slider:"+slider);
-        view.findViewById(R.id.benchBtn).setOnClickListener(v->slider.setSelectionAtPosition(2,true));
-        view.findViewById(R.id.squatBtn).setOnClickListener(v->slider.setSelectionAtPosition(3,true));
-        view.findViewById(R.id.deadliftBtn).setOnClickListener(v->slider.setSelectionAtPosition(4,true));
+        view.findViewById(R.id.startWorkoutBtn).setOnClickListener(v->slider.setSelectionAtPosition(1,true));
+        view.findViewById(R.id.benchBtn).setOnClickListener(v->slider.setSelectionAtPosition(3,true));
+        view.findViewById(R.id.squatBtn).setOnClickListener(v->slider.setSelectionAtPosition(4,true));
+        view.findViewById(R.id.deadliftBtn).setOnClickListener(v->slider.setSelectionAtPosition(5,true));
+
     }
 
     private String getRandomEmoji() {
