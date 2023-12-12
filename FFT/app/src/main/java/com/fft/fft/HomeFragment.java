@@ -25,7 +25,9 @@ import java.util.Random;
 
 public class HomeFragment extends Fragment {
     private final String TAG = "FFT_HomeFragment";
-    private DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference db;
+    private DatabaseReference myRef;
+    private ValueEventListener listener;
 
     public HomeFragment(){
         super(R.layout.home_fragment);
@@ -37,6 +39,7 @@ public class HomeFragment extends Fragment {
         Log.i(TAG, "fragment created with bundle ");
 
         getActivity().setTitle("FFT");
+        db = FirebaseDatabase.getInstance().getReference();
 
         MaterialCardView planCard = view.findViewById(R.id.card_plan);
         planCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.planCard));
@@ -51,14 +54,16 @@ public class HomeFragment extends Fragment {
         TextView numWorkouts = view.findViewById(R.id.numWorkout);
         TextView currentWorkout = view.findViewById(R.id.CurrentWorkout);
 
-        DatabaseReference myRef = db.child("users").child(uid);
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef = db.child("users").child(uid);
+        listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 if(user == null){
                     Log.e(TAG, "LOGGING OUT");
                     FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(getContext(), Login.class);
+                    startActivity(intent);
                 }else {
                     Log.i(TAG, "user is: " + user);
                     Log.i(TAG, "Value is: " + user.numWorkouts);
@@ -72,7 +77,8 @@ public class HomeFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, "Failed to read value", error.toException());
             }
-        });
+        };
+        myRef.addValueEventListener(listener);
 
         MaterialDrawerSliderView slider = getActivity().findViewById(R.id.slider);
         view.findViewById(R.id.startWorkoutBtn).setOnClickListener(v->slider.setSelectionAtPosition(1,true));
@@ -80,6 +86,13 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.squatBtn).setOnClickListener(v->slider.setSelectionAtPosition(4,true));
         view.findViewById(R.id.deadliftBtn).setOnClickListener(v->slider.setSelectionAtPosition(5,true));
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        myRef.removeEventListener(listener);
+        Log.i(TAG, "Removing listener");
     }
 
     private String getRandomEmoji() {

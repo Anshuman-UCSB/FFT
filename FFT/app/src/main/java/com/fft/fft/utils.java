@@ -1,10 +1,14 @@
-package com.fft.fft.poseDetection;
+package com.fft.fft;
 
+import static androidx.core.content.ContextCompat.startActivity;
 import static java.lang.Math.atan2;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.PointF;
 import android.util.Size;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseLandmark;
 

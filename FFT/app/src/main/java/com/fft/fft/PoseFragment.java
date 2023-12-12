@@ -1,6 +1,6 @@
 package com.fft.fft;
 
-import static com.fft.fft.poseDetection.utils.getSizeForDesiredSize;
+import static com.fft.fft.utils.getSizeForDesiredSize;
 
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
@@ -27,7 +27,6 @@ import com.fft.fft.coaches.Coach;
 import com.fft.fft.coaches.DeadliftCoach;
 import com.fft.fft.coaches.SquatCoach;
 import com.fft.fft.gles.GraphicOverlay;
-import com.fft.fft.R;
 import com.fft.fft.poseDetection.CustomPoseDetector;
 import com.fft.fft.poseDetection.PoseGraphic;
 import com.google.android.exoplayer2.MediaItem;
