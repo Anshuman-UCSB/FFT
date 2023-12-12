@@ -17,4 +17,5 @@
     <string name="bench">Bench</string>
     <string name="squat">Squat</string>
     <string name="deadlift">Deadlift</string>
+    <string name="start_workout">Start Workout</string>
 </resources>

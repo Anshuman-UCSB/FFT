@@ -21,11 +21,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 
+import java.util.Random;
+
 public class HomeFragment extends Fragment {
     private final String TAG = "FFT_HomeFragment";
     private DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-
-    private TextView numWorkouts;
 
     public HomeFragment(){
         super(R.layout.home_fragment);
@@ -47,7 +47,10 @@ public class HomeFragment extends Fragment {
         TextView greeter = view.findViewById(R.id.greeter);
         greeter.setText(String.format("Welcome %s!", requireArguments().getString("name")));
         String uid = requireArguments().getString("uid");
-        numWorkouts = view.findViewById(R.id.numWorkout);
+
+        TextView numWorkouts = view.findViewById(R.id.numWorkout);
+        TextView currentWorkout = view.findViewById(R.id.CurrentWorkout);
+
         DatabaseReference myRef = db.child("users").child(uid);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -59,7 +62,8 @@ public class HomeFragment extends Fragment {
                 }else {
                     Log.i(TAG, "user is: " + user);
                     Log.i(TAG, "Value is: " + user.numWorkouts);
-                    numWorkouts.setText(String.format("Workout #%d", user.numWorkouts));
+                    numWorkouts.setText(String.format("Workout #%d", user.numWorkouts+1));
+                    currentWorkout.setText(String.format("Today is your %s day! %s",user.getDay(), getRandomEmoji()));
                 }
             }
 
@@ -74,5 +78,10 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.benchBtn).setOnClickListener(v->slider.setSelectionAtPosition(2,true));
         view.findViewById(R.id.squatBtn).setOnClickListener(v->slider.setSelectionAtPosition(3,true));
         view.findViewById(R.id.deadliftBtn).setOnClickListener(v->slider.setSelectionAtPosition(4,true));
+    }
+
+    private String getRandomEmoji() {
+        String[] emojis = {"🥰","😍","🥳","🎉","⭐","✨","🌟"};
+        return emojis[new Random().nextInt(emojis.length)];
     }
 }

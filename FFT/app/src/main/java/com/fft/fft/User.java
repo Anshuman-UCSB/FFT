@@ -17,4 +17,13 @@ public class User {
         name = user.getDisplayName();
         email = user.getEmail();
     }
+
+    public String getDay() {
+        switch(numWorkouts%3){
+            case 0: return "push";
+            case 1: return "pull";
+            case 2: return "legs";
+        }
+        return "rest";
+    }
 }
