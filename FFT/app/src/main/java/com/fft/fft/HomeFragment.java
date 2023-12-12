@@ -62,9 +62,9 @@ public class HomeFragment extends Fragment {
                 User user = snapshot.getValue(User.class);
                 if(user == null){
                     Log.e(TAG, "LOGGING OUT");
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(getContext(), Login.class);
-                    startActivity(intent);
+//                    FirebaseAuth.getInstance().signOut();
+//                    Intent intent = new Intent(getContext(), Login.class);
+//                    startActivity(intent);
                 }else {
                     Log.i(TAG, "user is: " + user);
                     Log.i(TAG, "Value is: " + user.numWorkouts);

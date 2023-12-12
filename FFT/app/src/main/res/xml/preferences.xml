@@ -9,6 +9,7 @@
     <SwitchPreferenceCompat
         app:key="debug"
         app:summary="Display numerical values during ML coaching"
+        app:defaultValue="true"
         app:title="Display Values"/>
     <Preference
         app:key="deleteUser"
