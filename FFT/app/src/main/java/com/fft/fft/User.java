@@ -1,6 +1,8 @@
 package com.fft.fft;
 
 import com.fft.fft.workouts.ActiveWorkout;
+import com.fft.fft.workouts.LegsWorkout;
+import com.fft.fft.workouts.PullWorkout;
 import com.fft.fft.workouts.PushWorkout;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -41,11 +43,11 @@ public class User {
             case 0:
                 workout = new PushWorkout();
                 break;
-            case 1: // TODO: UPDATE WORKOUTS
-                workout = new PushWorkout();
+            case 1:
+                workout = new PullWorkout();
                 break;
             case 2:
-                workout = new PushWorkout();
+                workout = new LegsWorkout();
                 break;
         }
         workoutActive = true;
