@@ -1,7 +1,7 @@
 package com.fft.fft.coaches;
 
-import static com.fft.fft.utils.diffX;
-import static com.fft.fft.utils.diffY;
+import static com.fft.fft.poseDetection.utils.diffX;
+import static com.fft.fft.poseDetection.utils.diffY;
 import static java.lang.Math.abs;
 
 import android.content.Context;

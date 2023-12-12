@@ -1,4 +1,4 @@
-package com.fft.fft;
+package com.fft.fft.poseDetection;
 
 import static androidx.core.content.ContextCompat.startActivity;
 import static java.lang.Math.atan2;

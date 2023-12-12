@@ -1,9 +1,9 @@
 package com.fft.fft.coaches;
 
-import static com.fft.fft.utils.avgY;
-import static com.fft.fft.utils.diffX;
-import static com.fft.fft.utils.diffY;
-import static com.fft.fft.utils.dist;
+import static com.fft.fft.poseDetection.utils.avgY;
+import static com.fft.fft.poseDetection.utils.diffX;
+import static com.fft.fft.poseDetection.utils.diffY;
+import static com.fft.fft.poseDetection.utils.dist;
 
 import static java.lang.Math.abs;
 

@@ -1,6 +1,6 @@
 package com.fft.fft;
 
-import static com.fft.fft.utils.getSizeForDesiredSize;
+import static com.fft.fft.poseDetection.utils.getSizeForDesiredSize;
 
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
