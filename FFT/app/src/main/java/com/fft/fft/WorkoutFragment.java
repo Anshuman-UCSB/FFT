@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.fft.fft.Views.ExerciseEventListener;
 import com.fft.fft.workouts.ActiveWorkout;
 import com.fft.fft.workouts.Exercise;
 import com.fft.fft.Views.ExerciseView;
@@ -23,8 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 
-public class WorkoutFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class WorkoutFragment extends Fragment implements ExerciseEventListener {
     private static final String TAG = "FFT_WorkoutFragment";
     private DatabaseReference db;
     DatabaseReference ref;
@@ -38,6 +43,8 @@ public class WorkoutFragment extends Fragment {
     TextView workoutName, elapsedTime, workoutNumber;
     ScrollView scrollView;
     LinearLayout exerciseContainer;
+
+    List<ExerciseView> exerciseViews;
 
     private User user;
 
@@ -63,6 +70,8 @@ public class WorkoutFragment extends Fragment {
         workoutName = view.findViewById(R.id.workoutName);
         workoutNumber = view.findViewById(R.id.workoutNumber);
         elapsedTime = view.findViewById(R.id.elapsedTime);
+
+        exerciseViews = new ArrayList<>();
 
         scrollView = view.findViewById(R.id.scrollView);
         exerciseContainer = view.findViewById(R.id.exerciseContainer);
@@ -103,7 +112,9 @@ public class WorkoutFragment extends Fragment {
         user.finishWorkout();
         stopListeners();
         pushUser();
-
+        Toast.makeText(getContext(), "Great job finishing your workout!", Toast.LENGTH_SHORT).show();
+        MaterialDrawerSliderView slider = getActivity().findViewById(R.id.slider);
+        slider.setSelectionAtPosition(0,true);
     }
 
     public void stopListeners(){
@@ -137,11 +148,15 @@ public class WorkoutFragment extends Fragment {
             user.workoutActive = false;
         }
         if(!updatedWorkoutUI && user.workoutActive){
+            Log.i(TAG, "Reinitializing UI");
             workoutName.setText(String.format("%s %s", getString(R.string.current_workout), workout.type));
             workoutNumber.setText(String.format("%s%d", getString(R.string.workout_number), user.numWorkouts+1));
             handler.post(updateTime);
+            exerciseContainer.removeAllViews();
             for(Exercise e: user.workout.exercises){
-                exerciseContainer.addView(new ExerciseView(getContext(), e));
+                ExerciseView ev = new ExerciseView(getContext(), e);
+                ev.setListener(this);
+                exerciseContainer.addView(ev);
             }
             updatedWorkoutUI = true;
         }
@@ -152,5 +167,19 @@ public class WorkoutFragment extends Fragment {
             updatedWorkoutUI = false;
             pushUser();
         }
+    }
+
+    @Override
+    public void onCompletedChange(String name, int completed) {
+//        for(Exercise e: user.workout.exercises){
+//            if(e.name == name){
+//                e.setsDone = completed;
+//                break;
+//            }
+//        }
+        updatedWorkoutUI = false;
+        pushUser();
+        Log.i(TAG, "Exercise "+name+" was updated to "+completed);
+        Log.i(TAG, "Exercises: "+user.workout.exercises);
     }
 }

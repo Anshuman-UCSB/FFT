@@ -4,11 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:orientation="vertical">
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
+        android:id="@+id/exerciseCard"
+        android:layout_margin="10dp"
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/secondaryColor"
+        android:layout_width="match_parent"
+        android:padding="16dp"
         android:layout_height="match_parent">
 
         <TextView
@@ -16,10 +22,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/placeholder"
-            android:textSize="14sp"
+            android:textColor="#000000"
+            android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/nameTextView"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="24dp" />
+            />
 
         <TextView
             app:layout_constraintTop_toTopOf="parent"
@@ -27,9 +34,11 @@
             android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#000000"
             android:text="@string/placeholder"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="25sp"
+            android:textStyle="bold"
+            />
 
         <TextView
             android:id="@+id/setsAndReps"
@@ -38,9 +47,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="wrap_content"
             android:text="@string/placeholder"
-            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textSize="20sp"
             android:textStyle="bold"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
         android:id="@+id/setContainer"
