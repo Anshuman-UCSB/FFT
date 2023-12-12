@@ -4,6 +4,10 @@ import com.fft.fft.workouts.ActiveWorkout;
 import com.fft.fft.workouts.PushWorkout;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
+
 @IgnoreExtraProperties
 public class User {
     public int numWorkouts;
@@ -12,6 +16,8 @@ public class User {
     public String email;
     public ActiveWorkout workout;
     public boolean workoutActive;
+    public Map<String, Double> nameToWeight;
+
     public User(){
         workout = null;
     }
@@ -22,6 +28,11 @@ public class User {
         email = user.getEmail();
         workout = null;
         workoutActive = false;
+        nameToWeight = new HashMap<>();
+    }
+
+    public void setWeight(String name, double weight){
+        nameToWeight.put(name, weight);
     }
 
     public void setupWorkout(){
@@ -46,5 +57,11 @@ public class User {
             case 2: return "legs";
         }
         return "rest";
+    }
+    public void finishWorkout(){
+        assert workoutActive: "Tried to finish workout, but workoutActive is false";
+        workoutActive = false;
+        numWorkouts++;
+        workout = null;
     }
 }

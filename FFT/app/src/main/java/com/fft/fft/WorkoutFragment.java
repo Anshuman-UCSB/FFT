@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,8 @@ public class WorkoutFragment extends Fragment {
 
     TextView workoutName, elapsedTime, workoutNumber;
 
+    private User user;
+
     public WorkoutFragment(){ super(R.layout.workout_fragment);}
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class WorkoutFragment extends Fragment {
             @Override
             public void run() {
                 if(workout!=null){
-                    Log.d(TAG, "Updating time");
+                    Log.v(TAG, "Updating time");
                     elapsedTime.setText(workout.getElapsedTime());
                     handler.postDelayed(this, 1000);
                 }
@@ -54,6 +57,9 @@ public class WorkoutFragment extends Fragment {
         workoutName = view.findViewById(R.id.workoutName);
         workoutNumber = view.findViewById(R.id.workoutNumber);
         elapsedTime = view.findViewById(R.id.elapsedTime);
+        view.findViewById(R.id.finishBtn).setOnClickListener(v->{
+            workoutFinished();
+        });
 
         getActivity().setTitle("Workout");
         db = FirebaseDatabase.getInstance().getReference();
@@ -62,14 +68,15 @@ public class WorkoutFragment extends Fragment {
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                if(user == null){
+                User user_n = snapshot.getValue(User.class);
+                if(user_n == null){
                     Log.e(TAG, "LOGGING OUT");
                     FirebaseAuth.getInstance().signOut();
                     Intent intent = new Intent(getActivity().getApplicationContext(), Login.class);
                     startActivity(intent);
                 }else {
-                    processUser(user);
+                    user = user_n;
+                    processUser();
                 }
             }
 
@@ -81,19 +88,31 @@ public class WorkoutFragment extends Fragment {
         ref.addValueEventListener(listener);
     }
 
+    public void workoutFinished(){
+        Log.i(TAG, "Workout finished");
+        user.finishWorkout();
+        stopListeners();
+        pushUser();
+
+    }
+
+    public void stopListeners(){
+        ref.removeEventListener(listener);
+        handler.removeCallbacks(updateTime);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ref.removeEventListener(listener);
-        handler.removeCallbacks(updateTime);
+        stopListeners();
         Log.i(TAG, "Removing listener");
     }
 
-    public void pushUser(User user){
+    public void pushUser(){
         ref.setValue(user);
     }
 
-    private void processUser(User user) {
+    private void processUser() {
         Log.i(TAG, "Currently processing user " + user.name);
         workout = user.workout;
         if(user.workoutActive && workout == null){
@@ -108,9 +127,10 @@ public class WorkoutFragment extends Fragment {
         }
         if(!user.workoutActive) {
             Log.d(TAG, "Setting up new workout");
+            Toast.makeText(getContext(), "Creating a new workout!", Toast.LENGTH_SHORT).show();
             user.setupWorkout();
             updatedWorkoutUI = false;
-            pushUser(user);
+            pushUser();
         }
     }
 }

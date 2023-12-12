@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,7 +70,11 @@ public class HomeFragment extends Fragment {
                     Log.i(TAG, "Value is: " + user.numWorkouts);
                     numWorkouts.setText(String.format("Workout #%d", user.numWorkouts+1));
                     currentWorkout.setText(String.format("Today is your %s day! %s",user.getDay(), getRandomEmoji()));
-                    view.findViewById(R.id.startWorkoutBtn).setVisibility(View.VISIBLE);
+                    Button startWorkout = view.findViewById(R.id.startWorkoutBtn);
+                    startWorkout.setVisibility(View.VISIBLE);
+                    if(user.workoutActive){
+                        startWorkout.setText("Continue workout");
+                    }
                 }
             }
 

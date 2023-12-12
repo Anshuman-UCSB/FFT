@@ -10,8 +10,8 @@
         app:key="debug"
         app:summary="Display numerical values during ML coaching"
         app:title="Display Values"/>
-<!--    <Preference-->
-<!--        app:key="feedback"-->
-<!--        app:title="Send feedback"-->
-<!--        app:summary="Report technical issues or suggest new features"/>-->
+    <Preference
+        app:key="deleteUser"
+        app:title="Delete Account"
+        app:summary="WARNING: This will delete your account irrevocably"/>
 </PreferenceScreen>
