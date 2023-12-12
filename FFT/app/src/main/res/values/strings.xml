@@ -14,4 +14,7 @@
     <string name="plan">Plan</string>
     <string name="notes"><u>Notes</u></string>
     <string name="coaching">Coaching</string>
+    <string name="bench">Bench</string>
+    <string name="squat">Squat</string>
+    <string name="deadlift">Deadlift</string>
 </resources>

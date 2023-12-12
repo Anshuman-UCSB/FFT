@@ -103,7 +103,7 @@ public class SquatCoach extends Coach{
                 if(imbalanced > 0)
                     imbalanced--; // reset flag
             }
-            if(heightRatio < 2.8){
+            if(heightRatio < 3.3){
                 state = State.DOWN;
             }
         } else { // Down state
@@ -114,7 +114,7 @@ public class SquatCoach extends Coach{
             if(diffY(leftWrist, rightWrist) > margin/2){
                 imbalanced = 3;
             }
-            if(heightRatio > 3){
+            if(heightRatio > 3.4){
                 state = State.UP;
                 reps++;
             }

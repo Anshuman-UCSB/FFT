@@ -64,6 +64,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
         imageProcessor = new CustomPoseDetector(accurate);
 
         String exercise = requireArguments().getString("exercise");
+        getActivity().setTitle(exercise.toUpperCase()+" COACH");
         switch(exercise){
             case "bench":
                 coach = new BenchCoach(getContext());
@@ -105,6 +106,7 @@ public class PoseFragment extends Fragment implements TextureView.SurfaceTexture
             startSelectVideo();
         });
     }
+
 
     private View createVideoFrameView() {
         textureView = new TextureView(getContext());

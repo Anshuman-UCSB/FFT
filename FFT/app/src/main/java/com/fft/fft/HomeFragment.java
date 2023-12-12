@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 
 public class HomeFragment extends Fragment {
     private final String TAG = "FFT_HomeFragment";
@@ -34,6 +35,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "fragment created with bundle ");
+
+        getActivity().setTitle("FFT");
 
         MaterialCardView planCard = view.findViewById(R.id.card_plan);
         planCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.planCard));
@@ -66,5 +69,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        MaterialDrawerSliderView slider = getActivity().findViewById(R.id.slider);
+        Log.i(TAG, "Slider:"+slider);
+        view.findViewById(R.id.benchBtn).setOnClickListener(v->slider.setSelectionAtPosition(2,true));
+        view.findViewById(R.id.squatBtn).setOnClickListener(v->slider.setSelectionAtPosition(3,true));
+        view.findViewById(R.id.deadliftBtn).setOnClickListener(v->slider.setSelectionAtPosition(4,true));
     }
 }
